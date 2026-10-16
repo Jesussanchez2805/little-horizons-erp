@@ -1,119 +1,119 @@
-# Little Horizons Educational ERP System
+# Sistema ERP Educativo Little Horizons
 
 [![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Maven](https://img.shields.io/badge/Apache%20Maven-3.9.6-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Licencia](https://img.shields.io/badge/Licencia-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-An enterprise-grade Educational Resource Planning (ERP) platform developed in Java 17 for **Colegio Internacional Little Horizons S.A.S.** Built under strict **Model-View-Controller (MVC)** and **SOLID** architectural design patterns, the platform centralizes academic operations, faculty allocations, extracurricular clubs, inventory tracking (laboratories and library), executive analytics, and automated **DIAN-compliant Colombian Electronic Invoicing** with simulated **CUFE** cryptographic hashes and **ZXing QR codes**.
-
----
-
-## Table of Contents
-1. [Project Overview & Problem Statement](#1-project-overview--problem-statement)
-2. [Authors & Academic Context](#2-authors--academic-context)
-3. [Technology Stack & Dependencies](#3-technology-stack--dependencies)
-4. [Prerequisites](#4-prerequisites)
-5. [Database Architecture & Setup](#5-database-architecture--setup)
-6. [Installation & Build Guide](#6-installation--build-guide)
-7. [Running the Application](#7-running-the-application)
-8. [Software Architecture (MVC Design)](#8-software-architecture-mvc-design)
-9. [SOLID Principles & Software Design Patterns](#9-solid-principles--software-design-patterns)
-10. [Core Functional Modules](#10-core-functional-modules)
-    - [10.1 Academic Management & Enrollment](#101-academic-management--enrollment)
-    - [10.2 Teacher Workload & Scheduling](#102-teacher-workload--scheduling)
-    - [10.3 Extracurricular Clubs & Events](#103-extracurricular-clubs--events)
-    - [10.4 Financial Billing & DIAN Electronic Invoices](#104-financial-billing--dian-electronic-invoices)
-    - [10.5 Resource & Inventory Management (Library & Labs)](#105-resource--inventory-management-library--labs)
-    - [10.6 Advanced Reporting & Analytics](#106-advanced-reporting--analytics)
-11. [Defensive Programming, Error Handling & Logging](#11-defensive-programming-error-handling--logging)
-12. [Terminal User Interface (TUI) & ASCII Demos](#12-terminal-user-interface-tui--ascii-demos)
-13. [Unit & Integration Testing](#13-unit--integration-testing)
-14. [Known Limitations & Operational Assumptions](#14-known-limitations--operational-assumptions)
-15. [Future Roadmap & Enhancements](#15-future-roadmap--enhancements)
-16. [License & Contact](#16-license--contact)
+Plataforma integral de Planificación de Recursos Educativos (**Educational Resource Planning - ERP**) de nivel empresarial desarrollada en **Java 17** para el **Colegio Internacional Little Horizons S.A.S.**. Construida bajo una rigurosa arquitectura **Modelo-Vista-Controlador (MVC)** y fundamentada en los principios **SOLID**, esta solución centraliza y optimiza las operaciones académicas, la asignación de carga docente, los clubes extracurriculares, el control de inventario institucional (laboratorios y biblioteca), la analítica directiva en tiempo real y la emisión automatizada de **Facturas Electrónicas con lineamientos DIAN**, incluyendo generación criptográfica de **CUFE** (SHA-256) y códigos **QR con Google ZXing**.
 
 ---
 
-## 1. Project Overview & Problem Statement
-
-### Institutional Context
-**Colegio Internacional Little Horizons S.A.S.** (NIT: 901.482.391-7) is a bilingual educational institution in Colombia serving over 500 students from Preschool through 11th Grade (`Preescolar`, `1°` through `11°`), supported by more than 40 faculty members.
-
-### The Operational Challenge
-Prior to this ERP system, Little Horizons suffered from acute operational bottlenecks caused by fragmented paper registers, disparate spreadsheets, and disconnected manual records:
-- **Academic Data Loss:** Physical grade notebooks were susceptible to physical damage, transcription disputes, and lost history during term finals.
-- **Extracurricular Chaos:** No centralized enrollment existed for sports, arts, or robotics clubs, leading to oversubscribed spots and duplicate efforts.
-- **Billing Vulnerabilities & Non-Compliance:** Manual tuition calculations were error-prone, lacked automated sibling discount rules, and failed to issue regulated Colombian electronic invoices under **DIAN (Dirección de Impuestos y Aduanas Nacionales)** guidelines.
-- **Inventory Depletion:** High-value laboratory equipment (microscopes, digital scales) and library books were frequently misplaced due to the absence of a structured lending cycle and overdue tracking.
-- **Fragmented Visibility:** Administrators lacked executive dashboards to identify at-risk students, persistent absentees, or unpaid tuitions in real time.
-
-### The Solution
-The **Little Horizons ERP** operates as the central nervous system of the institution. It consolidates relational persistence, business logic enforcement, mathematical validation, and cross-module reporting into a single robust Java platform.
+## Tabla de Contenidos
+1. [Descripción General del Proyecto y Planteamiento del Problema](#1-descripción-general-del-proyecto-y-planteamiento-del-problema)
+2. [Autor y Contexto Académico](#2-autor-y-contexto-académico)
+3. [Stack Tecnológico y Dependencias](#3-stack-tecnológico-y-dependencias)
+4. [Requisitos Previos](#4-requisitos-previos)
+5. [Arquitectura y Configuración de la Base de Datos](#5-arquitectura-y-configuración-de-la-base-de-datos)
+6. [Guía de Instalación y Compilación](#6-guía-de-instalación-y-compilación)
+7. [Ejecución de la Aplicación](#7-ejecución-de-la-aplicación)
+8. [Arquitectura de Software (Patrón MVC)](#8-arquitectura-de-software-patrón-mvc)
+9. [Principios SOLID y Patrones de Diseño](#9-principios-solid-y-patrones-de-diseño)
+10. [Módulos Funcionales Principales](#10-módulos-funcionales-principales)
+    - [10.1 Gestión Académica y Matrículas](#101-gestión-académica-y-matrículas)
+    - [10.2 Carga Docente y Asignación de Horarios](#102-carga-docente-y-asignación-de-horarios)
+    - [10.3 Clubes Extracurriculares y Eventos](#103-clubes-extracurriculares-y-eventos)
+    - [10.4 Facturación Electrónica DIAN y Gestión Financiera](#104-facturación-electrónica-dian-y-gestión-financiera)
+    - [10.5 Gestión de Recursos e Inventario (Biblioteca y Laboratorios)](#105-gestión-de-recursos-e-inventario-biblioteca-y-laboratorios)
+    - [10.6 Reportes Avanzados y Analítica Ejecutiva](#106-reportes-avanzados-y-analítica-ejecutiva)
+11. [Programación Defensiva, Manejo de Errores y Logging](#11-programación-defensiva-manejo-de-errores-y-logging)
+12. [Interfaz de Usuario en Terminal (TUI) y Demostración ASCII](#12-interfaz-de-usuario-en-terminal-tui-y-demostración-ascii)
+13. [Pruebas Unitarias y de Integración](#13-pruebas-unitarias-y-de-integración)
+14. [Limitaciones Conocidas y Supuestos Operativos](#14-limitaciones-conocidas-y-supuestos-operativos)
+15. [Hoja de Ruta (Roadmap) y Mejoras Futuras](#15-hoja-de-ruta-roadmap-y-mejoras-futuras)
+16. [Licencia y Contacto](#16-licencia-y-contacto)
 
 ---
 
-## 2. Authors & Academic Context
+## 1. Descripción General del Proyecto y Planteamiento del Problema
 
-- **Author / Developer:** Jesús Sánchez
-- **GitHub Handle:** [@Jesussanchez2805](https://github.com/Jesussanchez2805)
-- **Email:** `Jesussanchez2805.js@gmail.com`
-- **Academic Purpose:** System developed as a graduation defense / thesis project showcasing enterprise Java architecture, modular design, JDBC relational persistence, and clean code principles.
+### Contexto Institucional
+El **Colegio Internacional Little Horizons S.A.S.** (NIT: 901.482.391-7) es una institución educativa bilingüe de Colombia que brinda formación integral a más de 500 estudiantes desde Preescolar hasta Grado Once (`Preescolar`, `1°` a `11°`), respaldada por una planta profesoral superior a 40 docentes y personal administrativo.
+
+### El Desafío Operativo
+Con anterioridad a la implementación de este sistema ERP, la institución experimentaba serios cuellos de botella y riesgos operativos ocasionados por la fragmentación de la información en libros físicos de papel, hojas de cálculo aisladas y registros manuales no integrados:
+- **Pérdida y Vulnerabilidad de Datos Académicos:** Las planillas de calificaciones físicas estaban expuestas a deterioro material, inconsistencias en transcripciones y falta de trazabilidad histórica durante los cierres de periodo.
+- **Descontrol en Actividades Extracurriculares:** No existía una gestión centralizada para las inscripciones en clubes deportivos, artísticos o de robótica, originando sobrecupos, cruces de horarios y duplicidad de esfuerzos.
+- **Riesgos Financieros e Incumplimiento Normativo:** Los cálculos de pensiones y matrículas manuales eran propensos a errores aritméticos, carecían de políticas automáticas de descuento por hermanos y no generaban facturación electrónica bajo los estándares normativos de la **DIAN (Dirección de Impuestos y Aduanas Nacionales de Colombia)**.
+- **Pérdida de Inventario y Recursos:** Equipos de laboratorio de alto costo (microscopios, balanzas de precisión) y material bibliográfico se extraviaban con frecuencia por la falta de un ciclo de préstamos estructurado con control de devoluciones y alertas de mora.
+- **Visibilidad Directiva Fragmentada:** El equipo directivo no disponía de reportes consolidados ni tableros en tiempo real para identificar tempranamente estudiantes en riesgo académico, ausentismo reiterado o cartera morosa.
+
+### La Solución
+El **ERP Little Horizons** se posiciona como el núcleo tecnológico de la institución. Centraliza la persistencia relacional, la validación estricta de reglas de negocio, la auditoría continua y la generación de reportes intermodulares dentro de un entorno Java robusto, seguro y escalable.
 
 ---
 
-## 3. Technology Stack & Dependencies
+## 2. Autor y Contexto Académico
 
-| Technology / Library | Version | Purpose in Little Horizons ERP |
+- **Autor / Desarrollador:** Jesús Sánchez
+- **Perfil de GitHub:** [@Jesussanchez2805](https://github.com/Jesussanchez2805)
+- **Correo Electrónico:** `Jesussanchez2805.js@gmail.com`
+- **Propósito Académico:** Proyecto desarrollado como trabajo de grado / sustentación académica profesional, demostrando dominio de arquitectura empresarial en Java, diseño modular desacoplado, persistencia relacional con JDBC, principios de código limpio (*Clean Code*) y patrones de software de la industria.
+
+---
+
+## 3. Stack Tecnológico y Dependencias
+
+| Tecnología / Librería | Versión | Rol en el ERP Little Horizons |
 | :--- | :--- | :--- |
-| **Java Development Kit (JDK)** | 17 LTS / 21 LTS | Modern Java runtime, Records, Streams, NIO.2, Switch Expressions |
-| **Apache Maven** | 3.9.6+ | Dependency management, build lifecycle, and uber-JAR shading |
-| **MySQL Database Engine** | 8.0+ | Relational persistence with foreign key constraints and transactional integrity |
-| **MySQL Connector/J** | 8.3.0 | High-performance Type-4 JDBC driver |
-| **OpenPDF (LibrePDF)** | 2.0.3 | LGPL/MPL-compliant PDF document generation for DIAN Electronic Invoices |
-| **Google ZXing ("Zebra Crossing")** | 3.5.3 | Cryptographic 2D QR Code image generation embedded into PDF invoices |
-| **JUnit Jupiter (JUnit 5)** | 5.10.2 | Unit testing suite for domain calculations and PDF invoice verification |
-| **Maven Shade Plugin** | 3.5.2 | Assembles an all-in-one executable fat JAR with embedded dependencies |
+| **Java Development Kit (JDK)** | 17 LTS / 21 LTS | Runtime moderno de Java, Records, Stream API, NIO.2, Switch Expressions |
+| **Apache Maven** | 3.9.6+ | Gestión de dependencias, ciclo de vida de construcción y empaquetado (*fat JAR*) |
+| **Motor de Base de Datos MySQL** | 8.0+ | Persistencia relacional, integridad referencial con claves foráneas y soporte transaccional |
+| **MySQL Connector/J** | 8.3.0 | Driver JDBC Tipo 4 de alto rendimiento |
+| **OpenPDF (LibrePDF)** | 2.0.3 | Motor de generación de documentos PDF con licencias LGPL/MPL para facturación DIAN |
+| **Google ZXing ("Zebra Crossing")** | 3.5.3 | Generación de matrices gráficas de códigos QR 2D embebidos en facturas PDF |
+| **JUnit Jupiter (JUnit 5)** | 5.10.2 | Suite de pruebas unitarias automatizadas para entidades de dominio y validación de PDF |
+| **Maven Shade Plugin** | 3.5.2 | Construcción de un artefacto ejecutable autocontenido (*shaded fat JAR*) con dependencias |
 
 ---
 
-## 4. Prerequisites
+## 4. Requisitos Previos
 
-Before installing and executing the application, ensure your environment meets the following requirements:
-1. **Java Runtime:** JDK 17 or higher installed (`java -version` and `javac -version`).
-2. **Maven:** Apache Maven 3.8+ installed (`mvn -version`).
-3. **MySQL Server:** MySQL 8.0 Community Server installed and running as a local or remote service.
-4. **Git:** Git 2.30+ installed for repository cloning and version control.
+Antes de instalar y poner en marcha la aplicación, verifique que su entorno cumpla con las siguientes herramientas instaladas y configuradas:
+1. **Java Runtime:** JDK 17 o superior instalado y configurado en el PATH (`java -version` y `javac -version`).
+2. **Maven:** Apache Maven 3.8+ instalado (`mvn -version`).
+3. **Servidor MySQL:** Servidor MySQL 8.0 Community activo localmente o accesible por red.
+4. **Git:** Git 2.30+ instalado para la clonación del repositorio y control de versiones.
 
 ---
 
-## 5. Database Architecture & Setup
+## 5. Arquitectura y Configuración de la Base de Datos
 
-The ERP relies on a relational database schema named `erp_little_horizons` defined in [`docs/database.sql`](docs/database.sql). The script creates 20 normalized tables with primary keys, foreign key constraints (`ON DELETE CASCADE` / `RESTRICT`), checks, and 30+ seed rows of realistic Colombian school data.
+El sistema se fundamenta en un esquema de base de datos relacional denominado `erp_little_horizons`, estructurado en el archivo [`docs/database.sql`](docs/database.sql). Dicho script define 20 tablas normalizadas con claves primarias, restricciones de integridad referencial (`ON DELETE CASCADE` / `RESTRICT`), restricciones de dominio (*CHECK constraints*) y más de 30 registros iniciales (*seed data*) con datos contextualizados a la realidad escolar colombiana.
 
-### Database Initialization Steps
+### Pasos para la Inicialización de la Base de Datos
 
-1. Open your terminal or MySQL command line client.
-2. Log into MySQL with administrative privileges:
+1. Abra una terminal o el cliente de consola de MySQL.
+2. Inicie sesión en MySQL con privilegios administrativos:
    ```bash
    mysql -u root -p
    ```
-3. Execute the database script:
+3. Ejecute el script SQL del repositorio:
    ```sql
    SOURCE docs/database.sql;
    ```
-   *Alternatively, run directly from your OS shell:*
+   *Alternativamente, puede ejecutarlo directamente desde la terminal del sistema operativo:*
    ```bash
    mysql -u root -p < docs/database.sql
    ```
-4. Verify the database tables were created:
+4. Compruebe la correcta creación de las tablas:
    ```sql
    USE erp_little_horizons;
    SHOW TABLES;
    ```
 
-### Database Credentials Configuration
-By default, the application connects using parameters defined in [`src/main/resources/db.properties`](src/main/resources/db.properties):
+### Configuración de Credenciales de Conexión
+Por defecto, la aplicación se conecta a la base de datos utilizando los parámetros establecidos en [`src/main/resources/db.properties`](src/main/resources/db.properties):
 ```properties
 db.host=localhost
 db.port=3306
@@ -121,62 +121,62 @@ db.name=erp_little_horizons
 db.user=root
 db.password=root
 ```
-> **Interactive Override:** If your MySQL root password is different, launch the application and choose **Option 8 (Database Configuration)** from the main menu to dynamically update and test the host, port, database, user, and password without editing files or restarting.
+> **Ajuste Dinámico e Interactivo:** Si la contraseña de su usuario MySQL es diferente a la predeterminada, no es necesario modificar manualmente los archivos de configuración. Al iniciar la aplicación, seleccione la **Opción 8 (Configuración de Base de Datos)** en el menú principal para actualizar interactivamente el host, puerto, base de datos, usuario y clave, probando la conexión de inmediato sin reiniciar.
 
 ---
 
-## 6. Installation & Build Guide
+## 6. Guía de Instalación y Compilación
 
-### Step 1: Clone the Repository
+### Paso 1: Clonar el Repositorio
 ```bash
 git clone https://github.com/Jesussanchez2805/little-horizons-erp.git
 cd little-horizons-erp
 ```
 
-### Step 2: Compile and Run Unit Tests
+### Paso 2: Compilar y Ejecutar Pruebas Automatizadas
 ```bash
 mvn test
 ```
 
-### Step 3: Package the Shaded Executable JAR
+### Paso 3: Empaquetar el JAR Ejecutable Autocontenido
 ```bash
 mvn package
 ```
-This builds an executable fat JAR in the `target/` directory:
+Este comando generará el artefacto ejecutable (*fat JAR*) en el directorio `target/`:
 - `target/little-horizons-erp-1.0.0.jar`
 
 ---
 
-## 7. Running the Application
+## 7. Ejecución de la Aplicación
 
-### Option A: Using the Standalone Executable JAR (Recommended)
+### Opción A: Mediante el JAR Ejecutable Autocontenido (Recomendada)
 ```bash
 java -jar target/little-horizons-erp-1.0.0.jar
 ```
 
-### Option B: Running via Maven
+### Opción B: Ejecución Directa mediante Maven
 ```bash
 mvn exec:java
 ```
 
 ---
 
-## 8. Software Architecture (MVC Design)
+## 8. Arquitectura de Software (Patrón MVC)
 
-The project adheres strictly to the **Model-View-Controller (MVC)** architectural paradigm, decoupling domain data, data access, business orchestration, and terminal presentation:
+El proyecto implementa con rigurosidad el patrón arquitectónico **Modelo-Vista-Controlador (MVC)**, garantizando una separación clara entre las entidades de dominio, el acceso a datos, la lógica de negocio y la interfaz de terminal:
 
 ```
 c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │
 ├── docs/
-│   └── database.sql                   # Complete DDL + 30+ Realistic DML Colombian seed rows
-├── invoices/                          # Auto-generated DIAN PDF Invoices (with QR & CUFE)
+│   └── database.sql                   # DDL completo + más de 30 registros DML de prueba colombianos
+├── invoices/                          # Facturas electrónicas DIAN generadas en PDF (con QR y CUFE)
 ├── src/
 │   ├── main/
 │   │   ├── java/com/littlehorizons/erp/
-│   │   │   ├── Main.java              # Application bootstrap and diagnostic entrypoint
+│   │   │   ├── Main.java              # Clase de inicio y diagnóstico de conexión del sistema
 │   │   │   │
-│   │   │   ├── model/                 # DOMAIN ENTITY LAYER (Plain Java Objects / POJOs)
+│   │   │   ├── model/                 # CAPA DE ENTIDADES DE DOMINIO (POJOs con encapsulación)
 │   │   │   │   ├── AcademicRecord.java
 │   │   │   │   ├── Attendance.java
 │   │   │   │   ├── Club.java
@@ -198,7 +198,7 @@ c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │   │   │   │   ├── Teacher.java
 │   │   │   │   └── TeacherAssignment.java
 │   │   │   │
-│   │   │   ├── dao/                   # DATA ACCESS OBJECT LAYER (JDBC & SQL Transactions)
+│   │   │   ├── dao/                   # CAPA DE ACCESO A DATOS (Interfaces JDBC y transacciones SQL)
 │   │   │   │   ├── AcademicDAO.java / AcademicDAOImpl.java
 │   │   │   │   ├── ExtracurricularDAO.java / ExtracurricularDAOImpl.java
 │   │   │   │   ├── FinancialDAO.java / FinancialDAOImpl.java
@@ -207,7 +207,7 @@ c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │   │   │   │   ├── StudentDAO.java / StudentDAOImpl.java
 │   │   │   │   └── TeacherDAO.java / TeacherDAOImpl.java
 │   │   │   │
-│   │   │   ├── controller/            # BUSINESS LOGIC & ORCHESTRATION LAYER (Streams & Rules)
+│   │   │   ├── controller/            # CAPA DE CONTROLADORES Y LÓGICA DE NEGOCIO (Streams y Reglas)
 │   │   │   │   ├── AcademicController.java
 │   │   │   │   ├── ExtracurricularController.java
 │   │   │   │   ├── FinancialController.java
@@ -216,7 +216,7 @@ c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │   │   │   │   ├── StudentController.java
 │   │   │   │   └── TeacherController.java
 │   │   │   │
-│   │   │   ├── view/                  # PRESENTATION LAYER (Console UI, Menus & Input Validation)
+│   │   │   ├── view/                  # CAPA DE PRESENTACIÓN (Interfaz de consola y menús interactivos)
 │   │   │   │   ├── AcademicView.java
 │   │   │   │   ├── ExtracurricularView.java
 │   │   │   │   ├── FinancialView.java
@@ -226,107 +226,107 @@ c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │   │   │   │   ├── StudentView.java
 │   │   │   │   └── TeacherView.java
 │   │   │   │
-│   │   │   └── util/                  # SHARED INFRASTRUCTURE & UTILITIES
-│   │   │       ├── AppLogger.java            # Centralized file logging to error_log.txt
-│   │   │       ├── ConsoleUtils.java         # Box borders, color/style formatting, dynamic tables
-│   │   │       ├── DatabaseConnection.java   # Thread-safe Singleton managing MySQL connections
-│   │   │       ├── InputValidator.java       # Resilient Scanner input validation & prompts
-│   │   │       └── PdfInvoiceGenerator.java  # OpenPDF + ZXing DIAN Electronic Invoice engine
+│   │   │   └── util/                  # UTILIDADES COMPARTIDAS E INFRAESTRUCTURA
+│   │   │       ├── AppLogger.java            # Logger centralizado con escritura en error_log.txt
+│   │   │       ├── ConsoleUtils.java         # Marcos decorativos en consola, tablas dinámicas y estilos
+│   │   │       ├── DatabaseConnection.java   # Patrón Singleton thread-safe para conexión a MySQL
+│   │   │       ├── InputValidator.java       # Validador robusto de entradas Scanner por consola
+│   │   │       └── PdfInvoiceGenerator.java  # Motor de Factura Electrónica DIAN con OpenPDF y ZXing
 │   │   │
 │   │   └── resources/
-│   │       └── db.properties          # Externalized database credentials configuration
+│   │       └── db.properties          # Archivo externo con parámetros de conexión a la base de datos
 │   │
 │   └── test/java/com/littlehorizons/erp/
-│       ├── ModelValidationTest.java   # Domain entity logic & calculation tests
-│       └── PdfInvoiceGeneratorTest.java # DIAN PDF invoice, CUFE, & QR generation tests
+│       ├── ModelValidationTest.java   # Pruebas de lógica de entidades, promedios y límites
+│       └── PdfInvoiceGeneratorTest.java # Pruebas de generación de facturas PDF, CUFE y QR DIAN
 │
-├── pom.xml                            # Maven build descriptor with shade plugin
-└── README.md                          # Comprehensive system documentation
+├── pom.xml                            # Descriptor Maven del proyecto con configuración del shade plugin
+└── README.md                          # Documentación técnica completa del sistema
 ```
 
 ---
 
-## 9. SOLID Principles & Software Design Patterns
+## 9. Principios SOLID y Patrones de Diseño
 
-The ERP codebase was designed as an exemplar of object-oriented principles:
+El diseño de la base de código del ERP refleja buenas prácticas de ingeniería de software orientada a objetos:
 
-### SOLID Principles
-1. **Single Responsibility Principle (SRP):**
-   - Each class owns a single cohesive responsibility. For example, `PdfInvoiceGenerator` only generates PDF documents; it does not query SQL or handle console inputs. `DatabaseConnection` only creates and manages JDBC connections.
-2. **Open/Closed Principle (OCP):**
-   - The DAO layer exposes clean interfaces (`StudentDAO`, `FinancialDAO`, etc.). If the persistence mechanism changes from MySQL to PostgreSQL or MongoDB, only the DAO implementations change without altering controllers or views.
-3. **Liskov Substitution Principle (LSP):**
-   - Controllers depend on interface abstractions (`AcademicDAO dao = new AcademicDAOImpl()`). Any compliant implementation can be substituted without breaking business rules.
-4. **Interface Segregation Principle (ISP):**
-   - Domain operations are partitioned into specific, fine-grained DAO interfaces (`GuardianDAO` separate from `StudentDAO`) rather than a monolithic repository interface.
-5. **Dependency Inversion Principle (DIP):**
-   - High-level business controllers depend on abstractions (DAO interfaces) rather than concrete SQL statements.
+### Principios SOLID
+1. **Single Responsibility Principle (SRP - Responsabilidad Única):**
+   - Cada clase responde a una única responsabilidad claramente definida. Por ejemplo, `PdfInvoiceGenerator` se encarga exclusivamente de construir el documento PDF; no realiza consultas SQL ni interactúa con la terminal. `DatabaseConnection` se ocupa únicamente de suministrar y gestionar la conexión JDBC.
+2. **Open/Closed Principle (OCP - Abierto/Cerrado):**
+   - La capa de persistencia se articula mediante contratos e interfaces (`StudentDAO`, `FinancialDAO`, etc.). Si en el futuro se migra el motor de almacenamiento de MySQL hacia PostgreSQL o MongoDB, basta con crear una nueva implementación sin alterar controladores ni vistas.
+3. **Liskov Substitution Principle (LSP - Sustitución de Liskov):**
+   - Los controladores interactúan con abstracciones de interfaces (`AcademicDAO dao = new AcademicDAOImpl()`). Cualquier implementación compatible puede sustituirse sin romper el comportamiento esperado de la lógica de negocio.
+4. **Interface Segregation Principle (ISP - Segregación de Interfaces):**
+   - Las operaciones de datos se encuentran particionadas en interfaces específicas y cohesivas (`GuardianDAO` independiente de `StudentDAO`), evitando interfaces monolíticas y sobrecargadas.
+5. **Dependency Inversion Principle (DIP - Inversión de Dependencias):**
+   - Los módulos de alto nivel (controladores de negocio) dependen de abstracciones (interfaces DAO) y no de sentencias SQL concretas o acoplamientos rígidos.
 
-### Design Patterns
-- **Singleton Pattern:** Used in `DatabaseConnection` to ensure a single, thread-safe database connection factory throughout the JVM lifecycle.
-- **Data Access Object (DAO) Pattern:** Encapsulates all raw JDBC operations (`PreparedStatement`, `ResultSet`, resource management via `try-with-resources`) to prevent SQL leakage into business logic.
-- **Factory / Builder Strategy:** Implemented in `PdfInvoiceGenerator` for composing PDF tables, font styles, and ZXing matrix buffers.
-- **Java Stream API:** Extensively utilized in `ReportController` and `AcademicController` for functional aggregations (computing student GPAs, filtering active memberships, finding top performing students, and grouping resource loan histories).
-
----
-
-## 10. Core Functional Modules
-
-### 10.1 Academic Management & Enrollment
-- **Student Profile Management:** Register, update, and search students by document ID or full name.
-- **Guardian (Acudiente) Associations:** Associate guardians with students; allows one guardian to manage multiple siblings.
-- **Grade Progression:** Enroll students into grades from Preschool to 11th Grade for specific academic years (`2026`).
-- **Course Enrollments:** Register students into grade-specific subjects (Mathematics, Spanish, Sciences, English, etc.).
-- **Grading Scale (0.0 – 5.0):** Record term grades (Terms I, II, III, IV, Final) strictly validated between `0.0` and `5.0` with one decimal place.
-- **Attendance Tracking:** Record daily attendance statuses (`Presente`, `Ausente`, `Tardanza`, `Excusa Médica`).
-
-### 10.2 Teacher Workload & Scheduling
-- **Faculty Directory:** Maintain teacher profiles, national identification, email, phone, and professional specialties.
-- **Subject Allocation:** Assign teachers to courses with assigned weekly schedules and designated classrooms.
-- **Schedule Conflict Prevention:** Verify active assignments to prevent overlapping classroom or teacher allocations.
-
-### 10.3 Extracurricular Clubs & Events
-- **Club Catalog:** Manage school clubs (Robotics, Arts, Debate, Soccer, Chess, Science) with assigned faculty mentors.
-- **Capacity Enforcement:** Enforce maximum quota constraints; the system prevents over-enrollment when a club reaches capacity (`currentMembers < maxCapacity`).
-- **School Events & Competitions:** Register institutional events (Science Fair, Cultural Day, Sports Tournament) and log student participation along with award positions (`1st Place`, `2nd Place`, `Participant`).
-
-### 10.4 Financial Billing & DIAN Electronic Invoices
-- **Billing Concepts:** Standard fee catalog (Tuition, Annual Enrollment, Uniforms, Field Trips, Cafeteria).
-- **Payment Processing:** Record receipts with payment methods (`Efectivo`, `Transferencia`, `Tarjeta`).
-- **Simulated DIAN Electronic Invoicing:**
-  - Computes a simulated **CUFE** (*Código Único de Factura Electrónica*) using SHA-256 cryptographic hashing of the invoice number, school NIT, client document, date, and monetary totals.
-  - Generates a **2D QR Code** with embedded metadata using Google ZXing.
-  - Compiles an executive PDF invoice saved automatically to the `invoices/` folder via OpenPDF.
-- **Delinquency Tracking:** Generates reports of students with overdue accounts and pending balances.
-
-### 10.5 Resource & Inventory Management (Library & Labs)
-- **Asset Catalog:** Track physical resources across four categories: `Libro`, `Equipo de Laboratorio`, `Equipo Deportivo`, and `Dispositivo Tecnológico`.
-- **Borrowing Workflow:** Issue loans to both students and teachers with expected return dates.
-- **Automated Availability State:** Borrowing an item automatically transitions its state to `Prestado`; returning it resets the status to `Disponible`.
-- **Overdue Monitoring:** Flags unreturned loans past their due date to assist administrative recovery.
-
-### 10.6 Advanced Reporting & Analytics
-- **Honor Roll (Top Academic Performers):** Computes student grade point averages across all courses and ranks top-performing students.
-- **At-Risk Student Alerts:** Flags students with averages below `3.0` for academic counseling.
-- **Attendance Deficiency Audit:** Identifies students exceeding 3 absences within an evaluation window.
-- **Financial Revenue Summaries:** Calculates monthly income, total invoiced amounts, and outstanding balances.
-- **Asset Utilization Reports:** Summarizes active vs. returned loans and identifies damaged or maintenance-flagged equipment.
+### Patrones de Diseño Aplicados
+- **Patrón Singleton:** Implementado en `DatabaseConnection` para asegurar una única instancia segura en entornos multihilo (*thread-safe*) que administre el pool y ciclo de vida de la conexión a MySQL en la JVM.
+- **Patrón Data Access Object (DAO):** Aísla por completo las operaciones JDBC (`PreparedStatement`, `ResultSet`, transacciones y cierre de recursos con `try-with-resources`), previniendo la fuga de consultas SQL hacia las capas superiores.
+- **Patrón Factory / Builder:** Utilizado en `PdfInvoiceGenerator` para la parametrización estructurada de tablas, fuentes tipográficas y codificación matricial de imágenes con ZXing.
+- **Java Stream API:** Empleado ampliamente en `ReportController` y `AcademicController` para realizar agregaciones funcionales (cálculo de promedios ponderados, filtros de membresías activas, detección de cuadro de honor y agrupación de préstamos).
 
 ---
 
-## 11. Defensive Programming, Error Handling & Logging
+## 10. Módulos Funcionales Principales
 
-The system is engineered for stability and enterprise resilience:
-- **Centralized Application Logger (`AppLogger`):** All SQL exceptions, system warnings, and diagnostic information are recorded with ISO-8601 timestamps and severity levels (`INFO`, `WARNING`, `SEVERE`) in `error_log.txt`.
-- **Defensive Console Validation (`InputValidator`):** Prevents `InputMismatchException` crashes through recursive validation loops for integers, decimals, dates, and non-empty text.
-- **Automatic Resource Management:** All database statements and streams use Java `try-with-resources` blocks to prevent connection leaks.
-- **Graceful Database Degradation:** If the MySQL database is unreachable upon startup, the system does not crash; it logs a warning, alerts the operator, and provides an interactive credential configuration screen.
+### 10.1 Gestión Académica y Matrículas
+- **Directorio de Estudiantes:** Registro, actualización y búsqueda ágil de estudiantes por número de identificación o nombre completo.
+- **Asociación de Acudientes / Padres:** Vinculación de acudientes con estudiantes, soportando la gestión de múltiples hermanos por parte de un mismo titular.
+- **Proceso de Matrícula:** Asignación formal de grado para el año lectivo vigente (`2026`), cubriendo desde Preescolar hasta Grado Once.
+- **Inscripción en Asignaturas:** Vinculación de estudiantes a cursos académicos correspondientes a su nivel (Matemáticas, Español, Ciencias, Inglés, etc.).
+- **Escala de Calificaciones (0.0 a 5.0):** Registro y validación estricta de notas por periodo (Periodos I, II, III, IV y Nota Definitiva), con validación de rango numérico a un decimal.
+- **Control de Asistencia:** Registro de asistencias con estados tipificados (`Presente`, `Ausente`, `Tardanza`, `Excusa Médica`).
+
+### 10.2 Carga Docente y Asignación de Horarios
+- **Directorio Profesoral:** Registro y consulta de docentes con datos de contacto, documento de identidad y áreas de especialidad pedagógica.
+- **Asignación Académica:** Vinculación de profesores a asignaturas y grados específicos, detallando salón de clases y franja horaria semanal.
+- **Prevención de Conflictos de Horario:** Verificación activa que previene colisiones de disponibilidad tanto de aulas como de docentes en el mismo bloque horario.
+
+### 10.3 Clubes Extracurriculares y Eventos
+- **Catálogo de Clubes:** Administración de actividades lúdicas y formativas (Robótica, Artes, Debate, Fútbol, Ajedrez, Ciencias) con docente orientador asignado.
+- **Control Estricto de Cupos:** Regla de negocio que valida el aforo máximo (`currentMembers < maxCapacity`), rechazando inscripciones cuando el cupo esté lleno.
+- **Eventos Escolares y Concursos:** Registro de actividades institucionales (Feria de la Ciencia, Día Cultural, Torneo Deportivo), con inscripción de participantes y registro de reconocimientos obtenidos (`1° Lugar`, `2° Lugar`, `Participante`).
+
+### 10.4 Facturación Electrónica DIAN y Gestión Financiera
+- **Catálogo de Conceptos de Pago:** Tarifas estandarizadas de la institución (Matrícula Anual, Pensión Mensual, Uniformes, Salidas Pedagógicas, Cafetería).
+- **Procesamiento de Pagos:** Registro de recaudos con múltiples modalidades de pago (`Efectivo`, `Transferencia`, `Tarjeta`).
+- **Simulación de Factura Electrónica DIAN:**
+  - Generación de **CUFE** (*Código Único de Factura Electrónica*) mediante hashing criptográfico SHA-256 combinando número de factura, NIT del colegio, documento del pagador, fecha y montos.
+  - Creación de **Código QR 2D** con metadatos embebidos utilizando Google ZXing.
+  - Renderizado automático del documento ejecutivo en formato PDF almacenado en la carpeta `invoices/` mediante OpenPDF.
+- **Control de Cartera:** Generación de listados de estudiantes con cuentas vencidas, saldos pendientes y estado de morosidad.
+
+### 10.5 Gestión de Recursos e Inventario (Biblioteca y Laboratorios)
+- **Inventario Institucional:** Seguimiento y catalogación de bienes en cuatro categorías: `Libro`, `Equipo de Laboratorio`, `Equipo Deportivo` y `Dispositivo Tecnológico`.
+- **Flujo de Préstamos:** Emisión y registro de préstamos de recursos dirigidos tanto a estudiantes como a docentes con fecha estimada de entrega.
+- **Transición Automática de Estados:** Al realizar un préstamo el recurso cambia a `Prestado`; al registrar su devolución vuelve automáticamente a `Disponible`.
+- **Control de Recursos en Mora:** Detección y reporte oportuno de artículos con fecha límite de devolución vencida.
+
+### 10.6 Reportes Avanzados y Analítica Ejecutiva
+- **Cuadro de Honor (Top Académico):** Cálculo en tiempo real del promedio ponderado general de calificaciones para destacar y premiar a los mejores estudiantes.
+- **Alerta de Estudiantes en Riesgo Académico:** Identificación oportuna de alumnos con promedio inferior a `3.0` para remitir a tutorías y acompañamiento.
+- **Auditoría de Inasistencias:** Reporte especializado de estudiantes que acumulan más de 3 fallas injustificadas en el periodo evaluado.
+- **Consolidados Financieros:** Cálculo del balance global: montos facturados, recaudos efectivos y cartera pendiente por cobrar.
+- **Uso y Estado de Recursos:** Balance del inventario: recursos en préstamo, devueltos, dañados o en mantenimiento.
 
 ---
 
-## 12. Terminal User Interface (TUI) & ASCII Demos
+## 11. Programación Defensiva, Manejo de Errores y Logging
 
-The console interface utilizes clean box-drawing borders and structured headers:
+El sistema fue concebido bajo directrices de alta estabilidad y tolerancia a fallos:
+- **Logger Centralizado del Sistema (`AppLogger`):** Captura todas las excepciones SQL, advertencias y sucesos diagnósticos relevantes en formato ISO-8601 con niveles de severidad (`INFO`, `WARNING`, `SEVERE`) en el archivo `error_log.txt`.
+- **Validación Defensiva en Terminal (`InputValidator`):** Impide caídas imprevistas por `InputMismatchException` mediante ciclos de reintento interactivo para números enteros, decimales, fechas y cadenas no vacías.
+- **Gestión Automática de Recursos:** Todas las operaciones de conexión, sentencias preparadas y flujos de datos utilizan bloques `try-with-resources`, garantizando la liberación de recursos sin fugas de memoria o de conexiones.
+- **Tolerancia a Indisponibilidad de Base de Datos:** Si el motor MySQL no se encuentra disponible al arrancar, el sistema no se detiene de forma abrupta; emite una alerta explicativa al operador y despliega una interfaz asistida para verificar o corregir las credenciales.
+
+---
+
+## 12. Interfaz de Usuario en Terminal (TUI) y Demostración ASCII
+
+La consola presenta una experiencia visual estructurada y ordenada mediante marcos decorativos y tablas con caracteres Unicode/ASCII:
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -347,7 +347,7 @@ The console interface utilizes clean box-drawing borders and structured headers:
 Seleccione una opción (1-9):
 ```
 
-### Dynamic ASCII Table Output Example
+### Ejemplo de Tabla Dinámica ASCII en Consola
 ```
 ====================================================================================================
  ID   | CÓDIGO      | NOMBRE                     | GRADO        | DOCUMENTO       | ESTADO    
@@ -360,18 +360,18 @@ Seleccione una opción (1-9):
 
 ---
 
-## 13. Unit & Integration Testing
+## 13. Pruebas Unitarias y de Integración
 
-The test suite in `src/test/java/com/littlehorizons/erp/` validates critical non-UI components:
-- **`ModelValidationTest`:** Tests domain integrity, student code generation format, grade boundary checks (`0.0` - `5.0`), and club membership limit rules.
-- **`PdfInvoiceGeneratorTest`:** Verifies SHA-256 CUFE generation, ZXing QR matrix rendering, and end-to-end PDF invoice writing to disk.
+La suite de pruebas automatizadas ubicada en `src/test/java/com/littlehorizons/erp/` certifica el correcto funcionamiento de los componentes críticos:
+- **`ModelValidationTest`:** Valida la integridad de las entidades del modelo, formato de generación de códigos de estudiante, validación de notas en el rango `0.0` - `5.0` y límites de aforo en membresías de clubes.
+- **`PdfInvoiceGeneratorTest`:** Verifica el cálculo correcto del hash CUFE mediante SHA-256, el renderizado de la matriz gráfica QR con ZXing y la correcta creación del archivo PDF en el sistema de archivos.
 
-To run all automated tests:
+Para ejecutar todas las pruebas automatizadas:
 ```bash
 mvn test
 ```
 
-Test Results Summary:
+Resultado esperado de la ejecución:
 ```
 [INFO] Running com.littlehorizons.erp.ModelValidationTest
 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
@@ -382,32 +382,32 @@ Test Results Summary:
 
 ---
 
-## 14. Known Limitations & Operational Assumptions
+## 14. Limitaciones Conocidas y Supuestos Operativos
 
-1. **Terminal Console Interface:** The primary interface is console-based (CLI/TUI) designed for standard UTF-8 terminal emulators. Windows PowerShell, Command Prompt, or Unix terminals should use UTF-8 (`chcp 65001` on legacy Windows if accents appear distorted).
-2. **DIAN Electronic Invoicing Simulation:** Invoices strictly follow the visual, cryptographic (SHA-256 CUFE), and QR layout required by DIAN Resolution rules, but do not transmit real-time XML SOAP/REST envelopes to DIAN's live production servers.
-3. **Single School Campus:** Assumes a single primary campus entity ("Colegio Internacional Little Horizons S.A.S.") with centralized fiscal NIT.
-
----
-
-## 15. Future Roadmap & Enhancements
-
-- [ ] **REST API Layer:** Expose endpoints using Spring Boot or Javalin for mobile app integration.
-- [ ] **Web Frontend:** Develop an interactive dashboard with React/Vue.js and Tailwind CSS.
-- [ ] **Direct DIAN SOAP Web Services:** Implement live XML signing with X.509 digital certificates.
-- [ ] **Parent Portal & Online Payments:** Integrate PSE, PayU, and Wompi payment gateways.
-- [ ] **Automated Email Notifications:** Dispatch PDF invoices and attendance alert emails to guardians via JavaMail SMTP.
+1. **Interfaz en Consola (CLI/TUI):** La interfaz primaria está diseñada para ejecutarse en terminales de texto compatibles con codificación UTF-8. En Windows PowerShell o CMD, asegúrese de contar con soporte de fuentes Unicode (puede ejecutar `chcp 65001` si nota caracteres especiales afectados).
+2. **Simulación de Factura Electrónica:** Las facturas emiten fielmente la representación gráfica, el código QR y el algoritmo del CUFE requeridos por la DIAN, pero no envían paquetes XML en tiempo real mediante SOAP a los servidores de producción de la autoridad tributaria.
+3. **Entidad Institucional Única:** La arquitectura actual contempla la operación de una sola sede educativa principal ("Colegio Internacional Little Horizons S.A.S.") con un único NIT tributario consolidado.
 
 ---
 
-## 16. License & Contact
+## 15. Hoja de Ruta (Roadmap) y Mejoras Futuras
 
-### License
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+- [ ] **Capa de Servicios API REST:** Exposición de endpoints seguros con Spring Boot o Javalin para consumo desde aplicaciones móviles.
+- [ ] **Portal Web Interactivo:** Desarrollo de un panel web responsivo para acudientes y docentes utilizando React/Vue.js y Tailwind CSS.
+- [ ] **Conexión Directa con Web Services DIAN:** Integración de firma digital XML basada en certificados digitales X.509 y transmisión SOAP directa.
+- [ ] **Pasarela de Pagos en Línea para Acudientes:** Integración de canales de pago electrónico (PSE, PayU, Wompi).
+- [ ] **Notificaciones Automáticas por Correo:** Envío automatizado de facturas PDF y reportes de inasistencias a los acudientes a través de JavaMail SMTP.
 
-### Contact Information
-- **Student Developer:** Jesús Sánchez
-- **GitHub:** [Jesussanchez2805](https://github.com/Jesussanchez2805)
-- **Email:** `Jesussanchez2805.js@gmail.com`
-- **Institution:** Colegio Internacional Little Horizons S.A.S.
-- **Project Repository:** [https://github.com/Jesussanchez2805/little-horizons-erp](https://github.com/Jesussanchez2805/little-horizons-erp)
+---
+
+## 16. Licencia y Contacto
+
+### Licencia
+Este proyecto se encuentra publicado bajo los términos de la **Licencia MIT**. Para mayores detalles, consulte el archivo [LICENSE](LICENSE).
+
+### Información de Contacto
+- **Desarrollador:** Jesús Sánchez
+- **GitHub:** [@Jesussanchez2805](https://github.com/Jesussanchez2805)
+- **Correo Electrónico:** `Jesussanchez2805.js@gmail.com`
+- **Institución:** Colegio Internacional Little Horizons S.A.S.
+- **Repositorio Oficial:** [https://github.com/Jesussanchez2805/little-horizons-erp](https://github.com/Jesussanchez2805/little-horizons-erp)
