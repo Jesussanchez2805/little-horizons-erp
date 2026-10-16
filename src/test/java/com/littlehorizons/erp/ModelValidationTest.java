@@ -3,6 +3,7 @@ package com.littlehorizons.erp;
 import com.littlehorizons.erp.model.Club;
 import com.littlehorizons.erp.model.ResourceItem;
 import com.littlehorizons.erp.model.Student;
+import com.littlehorizons.erp.model.TeacherLoan;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -48,5 +49,21 @@ class ModelValidationTest {
 
         item.setStatus("Prestado");
         assertFalse(item.isAvailable());
+    }
+
+    @Test
+    @DisplayName("Should evaluate teacher loan overdue logic correctly")
+    void testTeacherLoanOverdue() {
+        TeacherLoan loan = new TeacherLoan();
+        loan.setStatus("Activo");
+        loan.setExpectedReturnDate(LocalDate.now().minusDays(2));
+        assertTrue(loan.isOverdue(), "Active loan with return date in the past should be overdue");
+
+        loan.setExpectedReturnDate(LocalDate.now().plusDays(5));
+        assertFalse(loan.isOverdue(), "Active loan with return date in future should not be overdue");
+
+        loan.setStatus("Devuelto");
+        loan.setExpectedReturnDate(LocalDate.now().minusDays(5));
+        assertFalse(loan.isOverdue(), "Returned loan should never be flagged as overdue");
     }
 }

@@ -196,7 +196,8 @@ c:\...\Proyecto_ERP_Colegio_Little_Horizont
 │   │   │   │   ├── Student.java
 │   │   │   │   ├── StudentLoan.java
 │   │   │   │   ├── Teacher.java
-│   │   │   │   └── TeacherAssignment.java
+│   │   │   │   ├── TeacherAssignment.java
+│   │   │   │   └── TeacherLoan.java
 │   │   │   │
 │   │   │   ├── dao/                   # CAPA DE ACCESO A DATOS (Interfaces JDBC y transacciones SQL)
 │   │   │   │   ├── AcademicDAO.java / AcademicDAOImpl.java
