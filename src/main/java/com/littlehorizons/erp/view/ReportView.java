@@ -25,15 +25,15 @@ public class ReportView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 7: REPORTS & INSTITUTIONAL STATISTICS", "Little Horizons Educational ERP");
-            System.out.println(" 1. Institutional Executive Dashboard");
-            System.out.println(" 2. Top Academic Students Ranking (by GPA)");
-            System.out.println(" 3. Financial Revenue Breakdown by Payment Concept");
-            System.out.println(" 4. Resource Inventory Status Distribution");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 7: REPORTES Y ESTADÍSTICAS INSTITUCIONALES", "Little Horizons Educational ERP");
+            System.out.println(" 1. Tablero Ejecutivo Institucional");
+            System.out.println(" 2. Ranking de Excelencia Académica (por Promedio GPA)");
+            System.out.println(" 3. Desglose de Ingresos Financieros por Concepto");
+            System.out.println(" 4. Distribución del Inventario de Recursos por Estado");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 4);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 4);
 
             switch (choice) {
                 case 1 -> viewExecutiveDashboard();
@@ -46,10 +46,10 @@ public class ReportView {
     }
 
     private void viewExecutiveDashboard() {
-        ConsoleUtils.printSection("EXECUTIVE INSTITUTIONAL DASHBOARD");
+        ConsoleUtils.printSection("TABLERO EJECUTIVO INSTITUCIONAL");
         Map<String, Object> metrics = reportController.getExecutiveDashboardMetrics();
 
-        List<String> headers = List.of("Institutional Metric", "Value / Count");
+        List<String> headers = List.of("Métrica Institucional", "Valor / Total");
         List<List<String>> rows = new ArrayList<>();
 
         metrics.forEach((key, val) -> {
@@ -67,21 +67,21 @@ public class ReportView {
     }
 
     private void viewTopStudentsRanking() {
-        ConsoleUtils.printSection("TOP ACADEMIC STUDENTS RANKING");
-        int top = InputValidator.readInt("How many top students to display?", 3, 50);
+        ConsoleUtils.printSection("RANKING DE EXCELENCIA ACADÉMICA");
+        int top = InputValidator.readInt("¿Cuántos estudiantes destacados desea visualizar?", 3, 50);
 
         List<Map.Entry<String, Double>> ranking = reportController.getTopStudentsByGpa(top);
         if (ranking.isEmpty()) {
-            ConsoleUtils.printWarning("No grades recorded to build ranking.");
+            ConsoleUtils.printWarning("No hay calificaciones registradas para generar el ranking.");
         } else {
-            List<String> headers = List.of("Rank", "Student Details", "Cumulative GPA");
+            List<String> headers = List.of("Puesto", "Datos del Estudiante", "Promedio Acumulado");
             List<List<String>> rows = new ArrayList<>();
             int pos = 1;
             for (Map.Entry<String, Double> entry : ranking) {
                 String medal = "";
-                if (pos == 1) medal = " [1st - Gold]";
-                else if (pos == 2) medal = " [2nd - Silver]";
-                else if (pos == 3) medal = " [3rd - Bronze]";
+                if (pos == 1) medal = " [1° - Oro]";
+                else if (pos == 2) medal = " [2° - Plata]";
+                else if (pos == 3) medal = " [3° - Bronce]";
 
                 rows.add(List.of(
                         "#" + pos + medal,
@@ -96,10 +96,10 @@ public class ReportView {
     }
 
     private void viewRevenueBreakdown() {
-        ConsoleUtils.printSection("REVENUE BREAKDOWN BY PAYMENT CONCEPT");
+        ConsoleUtils.printSection("DESGLOSE DE INGRESOS POR CONCEPTO DE PAGO");
         Map<String, BigDecimal> map = reportController.getRevenueByConcept();
 
-        List<String> headers = List.of("Payment Concept", "Total Revenue (COP)");
+        List<String> headers = List.of("Concepto de Pago", "Ingresos Totales (COP)");
         List<List<String>> rows = new ArrayList<>();
         BigDecimal grandTotal = BigDecimal.ZERO;
 
@@ -112,15 +112,15 @@ public class ReportView {
         }
 
         ConsoleUtils.printTable(headers, rows);
-        ConsoleUtils.printSuccess(String.format("Grand Total Recorded Revenue: $%,.2f COP", grandTotal.doubleValue()));
+        ConsoleUtils.printSuccess(String.format("Gran Total de Ingresos Registrados: $%,.2f COP", grandTotal.doubleValue()));
         InputValidator.pressEnterToContinue();
     }
 
     private void viewResourceBreakdown() {
-        ConsoleUtils.printSection("RESOURCE INVENTORY DISTRIBUTION BY STATUS");
+        ConsoleUtils.printSection("DISTRIBUCIÓN DEL INVENTARIO DE RECURSOS POR ESTADO");
         Map<String, Long> map = reportController.getResourceInventoryBreakdown();
 
-        List<String> headers = List.of("Inventory Status", "Count");
+        List<String> headers = List.of("Estado del Inventario", "Cantidad");
         List<List<String>> rows = new ArrayList<>();
         for (Map.Entry<String, Long> entry : map.entrySet()) {
             rows.add(List.of(entry.getKey(), String.valueOf(entry.getValue())));

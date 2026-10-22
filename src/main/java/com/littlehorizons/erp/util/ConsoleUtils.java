@@ -63,7 +63,7 @@ public final class ConsoleUtils {
      * @param message Text to display
      */
     public static void printSuccess(String message) {
-        System.out.println("✔ [SUCCESS] " + message);
+        System.out.println("✔ [ÉXITO] " + message);
     }
 
     /**
@@ -90,7 +90,7 @@ public final class ConsoleUtils {
      * @param message Text to display
      */
     public static void printWarning(String message) {
-        System.out.println("⚠ [WARNING] " + message);
+        System.out.println("⚠ [AVISO] " + message);
     }
 
     /**
@@ -141,7 +141,7 @@ public final class ConsoleUtils {
             int totalInner = 0;
             for (int w : colWidths) totalInner += (w + 3);
             totalInner -= 1;
-            System.out.println(padCenter("No records found", totalInner) + "│");
+            System.out.println(padCenter("No se encontraron registros", totalInner) + "│");
         } else {
             for (List<String> row : rows) {
                 System.out.print("│");

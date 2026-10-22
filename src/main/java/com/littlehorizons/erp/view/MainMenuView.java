@@ -52,15 +52,15 @@ public class MainMenuView {
             System.out.println("║   Sistema Central de Planificación y Gestión Educativa       ║");
             System.out.println("╚══════════════════════════════════════════════════════════════╝");
             System.out.println();
-            System.out.println(" 1. Gestión de Estudiantes y Matrículas (Students & Guardians)");
-            System.out.println(" 2. Gestión Académica (Courses, Grades 0.0-5.0 & Attendance)");
-            System.out.println(" 3. Gestión de Profesores y Carga Académica (Faculty)");
-            System.out.println(" 4. Actividades Extracurriculares (Clubs & Events)");
-            System.out.println(" 5. Gestión Financiera (Payments & DIAN PDF Invoices)");
-            System.out.println(" 6. Gestión de Recursos (Library, Labs & Loan System)");
-            System.out.println(" 7. Reportes y Estadísticas (Executive Analytics & GPA)");
-            System.out.println(" 8. Configuración de Base de Datos (Database Connection)");
-            System.out.println(" 9. Salir del Sistema (Exit)");
+            System.out.println(" 1. Gestión de Estudiantes y Matrículas");
+            System.out.println(" 2. Gestión Académica (Cursos, Calificaciones y Asistencia)");
+            System.out.println(" 3. Gestión de Profesores y Carga Académica");
+            System.out.println(" 4. Actividades Extracurriculares (Clubes y Eventos)");
+            System.out.println(" 5. Gestión Financiera (Pagos y Facturación DIAN)");
+            System.out.println(" 6. Gestión de Recursos (Biblioteca, Laboratorios y Préstamos)");
+            System.out.println(" 7. Reportes y Estadísticas Ejecutivas");
+            System.out.println(" 8. Configuración de Base de Datos");
+            System.out.println(" 9. Salir del Sistema");
             System.out.println();
 
             int option = InputValidator.readInt("Seleccione una opción", 1, 9);
@@ -75,7 +75,8 @@ public class MainMenuView {
                 case 7 -> reportView.displayMenu();
                 case 8 -> configureDatabase();
                 case 9 -> {
-                    ConsoleUtils.printInfo("Gracias por utilizar Little Horizons ERP. Cerrando sesión de forma segura...");
+                    ConsoleUtils
+                            .printInfo("Gracias por utilizar Little Horizons ERP. Cerrando sesión de forma segura...");
                     exit = true;
                 }
             }
@@ -85,10 +86,10 @@ public class MainMenuView {
     private void configureDatabase() {
         ConsoleUtils.printSection("CONFIGURACIÓN DE CONEXIÓN A BASE DE DATOS");
         DatabaseConnection db = DatabaseConnection.getInstance();
-        System.out.println("Current host:     " + db.getHost());
-        System.out.println("Current port:     " + db.getPort());
-        System.out.println("Current database: " + db.getDatabase());
-        System.out.println("Current user:     " + db.getUser());
+        System.out.println("Host actual:          " + db.getHost());
+        System.out.println("Puerto actual:        " + db.getPort());
+        System.out.println("Base de datos actual: " + db.getDatabase());
+        System.out.println("Usuario actual:       " + db.getUser());
         System.out.println();
 
         boolean test = db.testConnection();
@@ -110,7 +111,8 @@ public class MainMenuView {
             if (db.testConnection()) {
                 ConsoleUtils.printSuccess("¡Conexión establecida con éxito con las nuevas credenciales!");
             } else {
-                ConsoleUtils.printError("No se pudo conectar con los datos ingresados. Verifique el servicio de MySQL.");
+                ConsoleUtils
+                        .printError("No se pudo conectar con los datos ingresados. Verifique el servicio de MySQL.");
             }
         }
         InputValidator.pressEnterToContinue();

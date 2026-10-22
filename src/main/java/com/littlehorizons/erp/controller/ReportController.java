@@ -53,13 +53,13 @@ public class ReportController {
                 .map(Payment::getAmountPaid)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        metrics.put("Total Registered Students", students.size());
-        metrics.put("Active Students", activeStudents);
-        metrics.put("Faculty Members", facultyCount);
-        metrics.put("Academic Courses", coursesCount);
-        metrics.put("Active Clubs", clubsCount);
-        metrics.put("Inventory Resources", resourcesCount);
-        metrics.put("Total Recorded Revenue", totalRevenue);
+        metrics.put("Total de Estudiantes Registrados", students.size());
+        metrics.put("Estudiantes Activos", activeStudents);
+        metrics.put("Docentes / Profesores", facultyCount);
+        metrics.put("Cursos y Asignaturas", coursesCount);
+        metrics.put("Clubes Extracurriculares", clubsCount);
+        metrics.put("Recursos en Inventario", resourcesCount);
+        metrics.put("Total de Ingresos Recaudados", totalRevenue);
 
         return metrics;
     }

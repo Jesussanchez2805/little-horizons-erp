@@ -27,17 +27,17 @@ public class TeacherView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 3: TEACHER MANAGEMENT", "Little Horizons Educational ERP");
-            System.out.println(" 1. List Faculty Directory");
-            System.out.println(" 2. Register New Teacher");
-            System.out.println(" 3. Search Teacher by ID");
-            System.out.println(" 4. Assign Course to Teacher (Carga Académica)");
-            System.out.println(" 5. View Teacher Workload & Assigned Courses");
-            System.out.println(" 6. View Course Assigned Teachers");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 3: GESTIÓN DE PROFESORES Y CARGA ACADÉMICA", "Little Horizons Educational ERP");
+            System.out.println(" 1. Listar Directorio de Profesores");
+            System.out.println(" 2. Registrar Nuevo Profesor");
+            System.out.println(" 3. Buscar Profesor por ID");
+            System.out.println(" 4. Asignar Curso a Profesor (Carga Académica)");
+            System.out.println(" 5. Ver Carga Académica y Cursos Asignados");
+            System.out.println(" 6. Ver Profesores Asignados a un Curso");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 6);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 6);
 
             switch (choice) {
                 case 1 -> listFacultyDirectory();
@@ -52,10 +52,10 @@ public class TeacherView {
     }
 
     private void listFacultyDirectory() {
-        ConsoleUtils.printSection("FACULTY DIRECTORY");
+        ConsoleUtils.printSection("DIRECTORIO DE PROFESORES");
         List<Teacher> teachers = teacherController.getAllTeachers();
 
-        List<String> headers = List.of("ID", "Doc Number", "Full Name", "Specialization", "Email", "Phone", "Status");
+        List<String> headers = List.of("ID", "N° Documento", "Nombre Completo", "Especialidad", "Correo Electrónico", "Teléfono", "Estado");
         List<List<String>> rows = new ArrayList<>();
         for (Teacher t : teachers) {
             rows.add(List.of(
@@ -69,84 +69,84 @@ public class TeacherView {
             ));
         }
         ConsoleUtils.printTable(headers, rows);
-        ConsoleUtils.printInfo("Total faculty members: " + teachers.size());
+        ConsoleUtils.printInfo("Total de profesores registrados: " + teachers.size());
         InputValidator.pressEnterToContinue();
     }
 
     private void registerTeacher() {
-        ConsoleUtils.printSection("REGISTER NEW TEACHER");
+        ConsoleUtils.printSection("REGISTRAR NUEVO PROFESOR");
 
-        String docType = InputValidator.readNonEmptyString("Document Type (CC, CE, Pasaporte)");
-        String docNumber = InputValidator.readNonEmptyString("Document Number");
-        String firstName = InputValidator.readNonEmptyString("First Name");
-        String secondName = InputValidator.readOptionalString("Middle Name", "");
-        String firstLastName = InputValidator.readNonEmptyString("First Last Name");
-        String secondLastName = InputValidator.readOptionalString("Second Last Name", "");
-        String email = InputValidator.readEmail("Email");
-        String phone = InputValidator.readNonEmptyString("Phone");
-        String spec = InputValidator.readNonEmptyString("Specialization / Department");
-        LocalDate hire = InputValidator.readDate("Hire Date");
+        String docType = InputValidator.readNonEmptyString("Tipo de Documento (CC, CE, Pasaporte)");
+        String docNumber = InputValidator.readNonEmptyString("Número de Documento");
+        String firstName = InputValidator.readNonEmptyString("Primer Nombre");
+        String secondName = InputValidator.readOptionalString("Segundo Nombre", "");
+        String firstLastName = InputValidator.readNonEmptyString("Primer Apellido");
+        String secondLastName = InputValidator.readOptionalString("Segundo Apellido", "");
+        String email = InputValidator.readEmail("Correo Electrónico");
+        String phone = InputValidator.readNonEmptyString("Teléfono");
+        String spec = InputValidator.readNonEmptyString("Especialidad / Departamento");
+        LocalDate hire = InputValidator.readDate("Fecha de Contratación");
 
         Teacher t = new Teacher(0, docType, docNumber, firstName, secondName, firstLastName,
                 secondLastName, email, phone, spec, hire, "Activo");
 
         Optional<Teacher> res = teacherController.registerTeacher(t);
         if (res.isPresent()) {
-            ConsoleUtils.printSuccess("Teacher registered successfully with ID: " + res.get().getId());
+            ConsoleUtils.printSuccess("Profesor registrado exitosamente con ID: " + res.get().getId());
         } else {
-            ConsoleUtils.printError("Failed to register teacher. Check for duplicated document or email.");
+            ConsoleUtils.printError("Error al registrar profesor. Verifique si el documento o correo ya existen.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void searchTeacher() {
-        ConsoleUtils.printSection("SEARCH TEACHER");
-        int id = InputValidator.readInt("Enter Teacher ID", 1, 999999);
+        ConsoleUtils.printSection("BUSCAR PROFESOR");
+        int id = InputValidator.readInt("Ingrese ID del Profesor", 1, 999999);
 
         Optional<Teacher> opt = teacherController.getTeacherById(id);
         if (opt.isPresent()) {
             Teacher t = opt.get();
-            ConsoleUtils.printSuccess("Teacher details:");
+            ConsoleUtils.printSuccess("Detalles del profesor:");
             System.out.println("  • ID:             " + t.getId());
-            System.out.println("  • Name:           " + t.getFullName());
-            System.out.println("  • Document:       " + t.getDocumentType() + " " + t.getDocumentNumber());
-            System.out.println("  • Specialization: " + t.getSpecialization());
-            System.out.println("  • Email:          " + t.getEmail());
-            System.out.println("  • Phone:          " + t.getPhone());
-            System.out.println("  • Hire Date:      " + t.getHireDate());
-            System.out.println("  • Status:         " + t.getStatus());
+            System.out.println("  • Nombre:         " + t.getFullName());
+            System.out.println("  • Documento:      " + t.getDocumentType() + " " + t.getDocumentNumber());
+            System.out.println("  • Especialidad:   " + t.getSpecialization());
+            System.out.println("  • Correo:         " + t.getEmail());
+            System.out.println("  • Teléfono:       " + t.getPhone());
+            System.out.println("  • Fecha Contrato: " + t.getHireDate());
+            System.out.println("  • Estado:         " + t.getStatus());
         } else {
-            ConsoleUtils.printError("Teacher not found.");
+            ConsoleUtils.printError("Profesor no encontrado.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void assignCourseToTeacher() {
-        ConsoleUtils.printSection("ASSIGN COURSE TO TEACHER");
-        int teacherId = InputValidator.readInt("Enter Teacher ID", 1, 999999);
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String section = InputValidator.readOptionalString("Section / Group", "A");
+        ConsoleUtils.printSection("ASIGNAR CURSO A PROFESOR (CARGA ACADÉMICA)");
+        int teacherId = InputValidator.readInt("Ingrese ID del Profesor", 1, 999999);
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String section = InputValidator.readOptionalString("Sección / Grupo", "A");
 
         Optional<TeacherAssignment> res = teacherController.assignCourse(teacherId, courseId, year, section);
         if (res.isPresent()) {
-            ConsoleUtils.printSuccess("Course assigned successfully. Assignment ID: " + res.get().getId());
+            ConsoleUtils.printSuccess("Curso asignado exitosamente. ID de Asignación: " + res.get().getId());
         } else {
-            ConsoleUtils.printError("Could not assign course. Check if teacher or course exists.");
+            ConsoleUtils.printError("No se pudo asignar el curso. Verifique si el profesor o el curso existen.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void viewTeacherWorkload() {
-        ConsoleUtils.printSection("TEACHER WORKLOAD & ASSIGNMENTS");
-        int teacherId = InputValidator.readInt("Enter Teacher ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
+        ConsoleUtils.printSection("CARGA ACADÉMICA Y ASIGNACIONES DEL PROFESOR");
+        int teacherId = InputValidator.readInt("Ingrese ID del Profesor", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
 
         List<TeacherAssignment> list = teacherController.getTeacherAssignments(teacherId, year);
         if (list.isEmpty()) {
-            ConsoleUtils.printWarning("No assignments found for Teacher ID " + teacherId + " in " + year);
+            ConsoleUtils.printWarning("No se encontraron asignaciones para el Profesor ID " + teacherId + " en el año " + year);
         } else {
-            List<String> headers = List.of("Assignment ID", "Course Code", "Course Name", "Section", "Year");
+            List<String> headers = List.of("ID Asignación", "Cód. Curso", "Nombre del Curso", "Sección", "Año");
             List<List<String>> rows = new ArrayList<>();
             for (TeacherAssignment ta : list) {
                 rows.add(List.of(
@@ -163,15 +163,15 @@ public class TeacherView {
     }
 
     private void viewCourseAssignments() {
-        ConsoleUtils.printSection("COURSE ASSIGNED TEACHERS");
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
+        ConsoleUtils.printSection("PROFESORES ASIGNADOS AL CURSO");
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
 
         List<TeacherAssignment> list = teacherController.getCourseAssignments(courseId, year);
         if (list.isEmpty()) {
-            ConsoleUtils.printWarning("No assigned teachers found for Course ID " + courseId + " in " + year);
+            ConsoleUtils.printWarning("No se encontraron profesores asignados para el Curso ID " + courseId + " en el año " + year);
         } else {
-            List<String> headers = List.of("Assignment ID", "Teacher Name", "Section", "Year");
+            List<String> headers = List.of("ID Asignación", "Nombre del Profesor", "Sección", "Año");
             List<List<String>> rows = new ArrayList<>();
             for (TeacherAssignment ta : list) {
                 rows.add(List.of(

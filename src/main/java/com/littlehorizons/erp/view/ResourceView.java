@@ -30,19 +30,19 @@ public class ResourceView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 6: RESOURCE MANAGEMENT (LIBRARY & LABS)", "Little Horizons Educational ERP");
-            System.out.println(" 1. Browse Resource Inventory (Catálogo de Recursos)");
-            System.out.println(" 2. Register New Resource in Inventory");
-            System.out.println(" 3. Issue Loan to Student (Préstamo a Estudiante)");
-            System.out.println(" 4. Process Return from Student (Devolución)");
-            System.out.println(" 5. Issue Loan to Teacher (Préstamo a Profesor)");
-            System.out.println(" 6. Process Return from Teacher (Devolución)");
-            System.out.println(" 7. View Active Loans (Student & Faculty)");
-            System.out.println(" 8. Overdue Loans Report (Préstamos Vencidos)");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 6: GESTIÓN DE RECURSOS (BIBLIOTECA Y LABORATORIOS)", "Little Horizons Educational ERP");
+            System.out.println(" 1. Explorar Inventario de Recursos");
+            System.out.println(" 2. Registrar Nuevo Recurso en Inventario");
+            System.out.println(" 3. Prestar Recurso a Estudiante");
+            System.out.println(" 4. Procesar Devolución de Estudiante");
+            System.out.println(" 5. Prestar Recurso a Profesor");
+            System.out.println(" 6. Procesar Devolución de Profesor");
+            System.out.println(" 7. Ver Préstamos Activos (Estudiantes y Profesores)");
+            System.out.println(" 8. Reporte de Préstamos Vencidos en Mora");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 8);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 8);
 
             switch (choice) {
                 case 1 -> browseInventory();
@@ -59,10 +59,10 @@ public class ResourceView {
     }
 
     private void browseInventory() {
-        ConsoleUtils.printSection("RESOURCE INVENTORY");
+        ConsoleUtils.printSection("INVENTARIO DE RECURSOS");
         List<ResourceItem> items = resourceController.getAllResources();
 
-        List<String> headers = List.of("ID", "Code", "Resource Name", "Category", "Location", "Status");
+        List<String> headers = List.of("ID", "Código", "Nombre del Recurso", "Categoría", "Ubicación", "Estado");
         List<List<String>> rows = new ArrayList<>();
         for (ResourceItem r : items) {
             rows.add(List.of(
@@ -75,100 +75,100 @@ public class ResourceView {
             ));
         }
         ConsoleUtils.printTable(headers, rows);
-        ConsoleUtils.printInfo("Total resources in catalog: " + items.size());
+        ConsoleUtils.printInfo("Total de recursos en catálogo: " + items.size());
         InputValidator.pressEnterToContinue();
     }
 
     private void registerResource() {
-        ConsoleUtils.printSection("REGISTER INVENTORY RESOURCE");
-        String code = InputValidator.readNonEmptyString("Resource Unique Code (e.g., LIB-011, LAB-009)");
-        String name = InputValidator.readNonEmptyString("Resource Name");
+        ConsoleUtils.printSection("REGISTRAR RECURSO EN INVENTARIO");
+        String code = InputValidator.readNonEmptyString("Código Único del Recurso (ej. LIB-011, LAB-009)");
+        String name = InputValidator.readNonEmptyString("Nombre del Recurso");
 
         List<ResourceCategory> cats = resourceController.getAllCategories();
-        System.out.println("\nSelect Category:");
+        System.out.println("\nSeleccione Categoría:");
         for (ResourceCategory c : cats) {
             System.out.printf("  [%d] %s%n", c.getId(), c.getName());
         }
-        int catId = InputValidator.readInt("Category ID", 1, 5);
-        String desc = InputValidator.readNonEmptyString("Description");
-        String location = InputValidator.readNonEmptyString("Physical Storage Location (e.g. Biblioteca - Estante C)");
+        int catId = InputValidator.readInt("ID de la Categoría", 1, 5);
+        String desc = InputValidator.readNonEmptyString("Descripción");
+        String location = InputValidator.readNonEmptyString("Ubicación Física de Almacenamiento (ej. Biblioteca - Estante C)");
 
         ResourceItem item = new ResourceItem(0, code, name, catId, desc, LocalDate.now(), location, "Disponible");
         Optional<ResourceItem> res = resourceController.createResource(item);
         if (res.isPresent()) {
-            ConsoleUtils.printSuccess("Resource added to catalog with ID: " + res.get().getId());
+            ConsoleUtils.printSuccess("Recurso añadido al catálogo con ID: " + res.get().getId());
         } else {
-            ConsoleUtils.printError("Failed to register resource. Code might already exist.");
+            ConsoleUtils.printError("Error al registrar recurso. El código ya podría existir.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void issueStudentLoan() {
-        ConsoleUtils.printSection("ISSUE RESOURCE LOAN TO STUDENT");
-        int resourceId = InputValidator.readInt("Enter Resource ID", 1, 999999);
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        LocalDate returnDate = InputValidator.readDate("Expected Return Date");
-        String obs = InputValidator.readOptionalString("Loan Observations", "Préstamo de biblioteca/laboratorio");
+        ConsoleUtils.printSection("PRESTAR RECURSO A ESTUDIANTE");
+        int resourceId = InputValidator.readInt("Ingrese ID del Recurso", 1, 999999);
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        LocalDate returnDate = InputValidator.readDate("Fecha Prevista de Devolución");
+        String obs = InputValidator.readOptionalString("Observaciones del Préstamo", "Préstamo de biblioteca/laboratorio");
 
         Optional<StudentLoan> loan = resourceController.loanToStudent(resourceId, studentId, returnDate, obs);
         if (loan.isPresent()) {
-            ConsoleUtils.printSuccess("Loan issued successfully! Loan ID: " + loan.get().getId());
-            ConsoleUtils.printInfo("Resource status updated automatically to 'Prestado'.");
+            ConsoleUtils.printSuccess("¡Préstamo registrado exitosamente! ID de Préstamo: " + loan.get().getId());
+            ConsoleUtils.printInfo("El estado del recurso se actualizó automáticamente a 'Prestado'.");
         } else {
-            ConsoleUtils.printError("Could not issue loan. Ensure resource exists and is currently 'Disponible'.");
+            ConsoleUtils.printError("No se pudo realizar el préstamo. Asegúrese de que el recurso exista y esté 'Disponible'.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void returnStudentLoan() {
-        ConsoleUtils.printSection("RETURN STUDENT LOAN");
-        int loanId = InputValidator.readInt("Enter Student Loan ID", 1, 999999);
-        String obs = InputValidator.readOptionalString("Return Condition Remarks", "Devuelto en buen estado");
+        ConsoleUtils.printSection("DEVOLUCIÓN DE PRÉSTAMO DE ESTUDIANTE");
+        int loanId = InputValidator.readInt("Ingrese ID del Préstamo del Estudiante", 1, 999999);
+        String obs = InputValidator.readOptionalString("Observaciones del Estado de Devolución", "Devuelto en buen estado");
 
         boolean ok = resourceController.returnStudentLoan(loanId, obs);
         if (ok) {
-            ConsoleUtils.printSuccess("Loan marked as 'Devuelto'. Resource status set to 'Disponible'.");
+            ConsoleUtils.printSuccess("Préstamo marcado como 'Devuelto'. Estado del recurso restablecido a 'Disponible'.");
         } else {
-            ConsoleUtils.printError("Failed to process loan return.");
+            ConsoleUtils.printError("Error al procesar la devolución del préstamo.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void issueTeacherLoan() {
-        ConsoleUtils.printSection("ISSUE RESOURCE LOAN TO TEACHER");
-        int resourceId = InputValidator.readInt("Enter Resource ID", 1, 999999);
-        int teacherId = InputValidator.readInt("Enter Teacher ID", 1, 999999);
-        LocalDate returnDate = InputValidator.readDate("Expected Return Date");
-        String obs = InputValidator.readOptionalString("Loan Observations", "Uso docente en clase");
+        ConsoleUtils.printSection("PRESTAR RECURSO A PROFESOR");
+        int resourceId = InputValidator.readInt("Ingrese ID del Recurso", 1, 999999);
+        int teacherId = InputValidator.readInt("Ingrese ID del Profesor", 1, 999999);
+        LocalDate returnDate = InputValidator.readDate("Fecha Prevista de Devolución");
+        String obs = InputValidator.readOptionalString("Observaciones del Préstamo", "Uso docente en clase");
 
         Optional<TeacherLoan> loan = resourceController.loanToTeacher(resourceId, teacherId, returnDate, obs);
         if (loan.isPresent()) {
-            ConsoleUtils.printSuccess("Teacher loan issued successfully! Loan ID: " + loan.get().getId());
-            ConsoleUtils.printInfo("Resource status updated automatically to 'Prestado'.");
+            ConsoleUtils.printSuccess("¡Préstamo a profesor registrado exitosamente! ID de Préstamo: " + loan.get().getId());
+            ConsoleUtils.printInfo("El estado del recurso se actualizó automáticamente a 'Prestado'.");
         } else {
-            ConsoleUtils.printError("Could not issue loan. Ensure resource exists and is currently 'Disponible'.");
+            ConsoleUtils.printError("No se pudo realizar el préstamo. Asegúrese de que el recurso exista y esté 'Disponible'.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void returnTeacherLoan() {
-        ConsoleUtils.printSection("RETURN TEACHER LOAN");
-        int loanId = InputValidator.readInt("Enter Teacher Loan ID", 1, 999999);
-        String obs = InputValidator.readOptionalString("Return Condition Remarks", "Devuelto en buen estado");
+        ConsoleUtils.printSection("DEVOLUCIÓN DE PRÉSTAMO DE PROFESOR");
+        int loanId = InputValidator.readInt("Ingrese ID del Préstamo del Profesor", 1, 999999);
+        String obs = InputValidator.readOptionalString("Observaciones del Estado de Devolución", "Devuelto en buen estado");
 
         boolean ok = resourceController.returnTeacherLoan(loanId, obs);
         if (ok) {
-            ConsoleUtils.printSuccess("Teacher loan marked as 'Devuelto'. Resource status set to 'Disponible'.");
+            ConsoleUtils.printSuccess("Préstamo marcado como 'Devuelto'. Estado del recurso restablecido a 'Disponible'.");
         } else {
-            ConsoleUtils.printError("Failed to process loan return.");
+            ConsoleUtils.printError("Error al procesar la devolución del préstamo.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void viewActiveLoans() {
-        ConsoleUtils.printSection("ACTIVE STUDENT LOANS");
+        ConsoleUtils.printSection("PRÉSTAMOS ACTIVOS DE ESTUDIANTES");
         List<StudentLoan> sLoans = resourceController.getActiveStudentLoans();
-        List<String> sHeaders = List.of("Loan ID", "Resource Code", "Resource Name", "Student", "Due Date", "Status");
+        List<String> sHeaders = List.of("ID Préstamo", "Cód. Recurso", "Nombre del Recurso", "Estudiante", "Fecha Límite", "Estado");
         List<List<String>> sRows = new ArrayList<>();
         for (StudentLoan sl : sLoans) {
             sRows.add(List.of(
@@ -182,9 +182,9 @@ public class ResourceView {
         }
         ConsoleUtils.printTable(sHeaders, sRows);
 
-        ConsoleUtils.printSection("ACTIVE TEACHER LOANS");
+        ConsoleUtils.printSection("PRÉSTAMOS ACTIVOS DE PROFESORES");
         List<TeacherLoan> tLoans = resourceController.getActiveTeacherLoans();
-        List<String> tHeaders = List.of("Loan ID", "Resource Code", "Resource Name", "Teacher", "Due Date", "Status");
+        List<String> tHeaders = List.of("ID Préstamo", "Cód. Recurso", "Nombre del Recurso", "Profesor", "Fecha Límite", "Estado");
         List<List<String>> tRows = new ArrayList<>();
         for (TeacherLoan tl : tLoans) {
             tRows.add(List.of(
@@ -201,16 +201,16 @@ public class ResourceView {
     }
 
     private void viewOverdueLoans() {
-        ConsoleUtils.printSection("OVERDUE LOANS AUDIT REPORT (PRÉSTAMOS VENCIDOS)");
+        ConsoleUtils.printSection("REPORTE DE PRÉSTAMOS VENCIDOS (AUDITORÍA)");
         List<StudentLoan> sOverdue = resourceController.getOverdueStudentLoans();
         List<TeacherLoan> tOverdue = resourceController.getOverdueTeacherLoans();
 
         if (sOverdue.isEmpty() && tOverdue.isEmpty()) {
-            ConsoleUtils.printSuccess("Excellent! No loans are currently overdue.");
+            ConsoleUtils.printSuccess("¡Excelente! No hay préstamos vencidos actualmente.");
         } else {
             if (!sOverdue.isEmpty()) {
-                System.out.println("\nOverdue Student Loans:");
-                List<String> sHeaders = List.of("Loan ID", "Resource", "Student Name", "Expected Return Date");
+                System.out.println("\nPréstamos Vencidos de Estudiantes:");
+                List<String> sHeaders = List.of("ID Préstamo", "Recurso", "Nombre del Estudiante", "Fecha Límite Esperada");
                 List<List<String>> sRows = new ArrayList<>();
                 for (StudentLoan sl : sOverdue) {
                     sRows.add(List.of(
@@ -224,8 +224,8 @@ public class ResourceView {
             }
 
             if (!tOverdue.isEmpty()) {
-                System.out.println("\nOverdue Teacher Loans:");
-                List<String> tHeaders = List.of("Loan ID", "Resource", "Teacher Name", "Expected Return Date");
+                System.out.println("\nPréstamos Vencidos de Profesores:");
+                List<String> tHeaders = List.of("ID Préstamo", "Recurso", "Nombre del Profesor", "Fecha Límite Esperada");
                 List<List<String>> tRows = new ArrayList<>();
                 for (TeacherLoan tl : tOverdue) {
                     tRows.add(List.of(

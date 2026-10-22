@@ -28,19 +28,19 @@ public class AcademicView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 2: ACADEMIC & GRADE MANAGEMENT", "Little Horizons Educational ERP");
-            System.out.println(" 1. View Academic Grades & Course Catalog");
-            System.out.println(" 2. Enroll Student in Academic Grade (Matrícula)");
-            System.out.println(" 3. Register Student in Subject Course");
-            System.out.println(" 4. Record Student Grade (Nota 0.0 - 5.0)");
-            System.out.println(" 5. Consult Student Academic History & Cumulative GPA");
-            System.out.println(" 6. Calculate Course Class Average (Promedio de Curso)");
-            System.out.println(" 7. Record Daily Attendance (Presente, Ausente, Tardanza, Excusa)");
-            System.out.println(" 8. View Student Attendance & Absence Patterns");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 2: GESTIÓN ACADÉMICA Y CALIFICACIONES", "Little Horizons Educational ERP");
+            System.out.println(" 1. Ver Catálogo de Grados y Cursos");
+            System.out.println(" 2. Matricular Estudiante en Grado Académico");
+            System.out.println(" 3. Inscribir Estudiante en Curso o Asignatura");
+            System.out.println(" 4. Registrar Calificación de Estudiante (Nota 0.0 - 5.0)");
+            System.out.println(" 5. Consultar Historial Académico y Promedio Acumulado (GPA)");
+            System.out.println(" 6. Calcular Promedio General del Curso");
+            System.out.println(" 7. Registrar Asistencia Diaria (Presente, Ausente, Tardanza, Excusa)");
+            System.out.println(" 8. Ver Reporte de Asistencia y Ausentismo del Estudiante");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 8);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 8);
 
             switch (choice) {
                 case 1 -> viewCoursesCatalog();
@@ -57,10 +57,10 @@ public class AcademicView {
     }
 
     private void viewCoursesCatalog() {
-        ConsoleUtils.printSection("ACADEMIC COURSES CATALOG");
+        ConsoleUtils.printSection("CATÁLOGO DE CURSOS ACADÉMICOS");
         List<Course> courses = academicController.getAllCourses();
 
-        List<String> headers = List.of("ID", "Code", "Course Name", "Grade Level", "Hrs/Wk", "Active");
+        List<String> headers = List.of("ID", "Código", "Nombre del Curso", "Grado Académico", "Horas/Sem", "Activo");
         List<List<String>> rows = new ArrayList<>();
         for (Course c : courses) {
             rows.add(List.of(
@@ -69,7 +69,7 @@ public class AcademicView {
                     c.getName(),
                     c.getGradeName() != null ? c.getGradeName() : String.valueOf(c.getGradeId()),
                     String.valueOf(c.getWeeklyHours()),
-                    c.isActive() ? "YES" : "NO"
+                    c.isActive() ? "SÍ" : "NO"
             ));
         }
         ConsoleUtils.printTable(headers, rows);
@@ -77,74 +77,74 @@ public class AcademicView {
     }
 
     private void enrollStudentInGrade() {
-        ConsoleUtils.printSection("ENROLL STUDENT IN ACADEMIC GRADE");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("MATRICULAR ESTUDIANTE EN GRADO ACADÉMICO");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         // Display grades
         List<GradeLevel> grades = academicController.getAllGradeLevels();
-        System.out.println("\nAvailable Grade Levels:");
+        System.out.println("\nGrados Académicos Disponibles:");
         for (GradeLevel gl : grades) {
-            System.out.printf("  [%2d] %s (Level %d)%n", gl.getId(), gl.getName(), gl.getNumericLevel());
+            System.out.printf("  [%2d] %s (Nivel %d)%n", gl.getId(), gl.getName(), gl.getNumericLevel());
         }
 
-        int gradeId = InputValidator.readInt("Select Grade Level ID", 1, 12);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String obs = InputValidator.readOptionalString("Enrollment Remarks", "Matrícula regular");
+        int gradeId = InputValidator.readInt("Seleccione ID del Grado Académico", 1, 12);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String obs = InputValidator.readOptionalString("Observaciones de Matrícula", "Matrícula regular");
 
         Optional<Enrollment> result = academicController.enrollStudent(studentId, gradeId, year, obs);
         if (result.isPresent()) {
-            ConsoleUtils.printSuccess("Student successfully enrolled in grade with enrollment ID: " + result.get().getId());
+            ConsoleUtils.printSuccess("Estudiante matriculado exitosamente en el grado con ID de matrícula: " + result.get().getId());
         } else {
-            ConsoleUtils.printError("Could not enroll student. They may already be enrolled for this academic year.");
+            ConsoleUtils.printError("No se pudo matricular al estudiante. Ya podría estar matriculado para este año académico.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void registerStudentInCourse() {
-        ConsoleUtils.printSection("REGISTER STUDENT IN SUBJECT COURSE");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String period = InputValidator.readNonEmptyString("Academic Period (I, II, III, IV)");
-        String section = InputValidator.readOptionalString("Class Section", "A");
+        ConsoleUtils.printSection("INSCRIBIR ESTUDIANTE EN CURSO O ASIGNATURA");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String period = InputValidator.readNonEmptyString("Periodo Académico (I, II, III, IV)");
+        String section = InputValidator.readOptionalString("Sección / Grupo", "A");
 
         Optional<CourseRegistration> reg = academicController.registerStudentInCourse(studentId, courseId, year, period, section);
         if (reg.isPresent()) {
-            ConsoleUtils.printSuccess("Course registration confirmed with ID: " + reg.get().getId());
+            ConsoleUtils.printSuccess("Inscripción en el curso confirmada con ID: " + reg.get().getId());
         } else {
-            ConsoleUtils.printError("Failed to register in course.");
+            ConsoleUtils.printError("Error al inscribir estudiante en el curso.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void recordGrade() {
-        ConsoleUtils.printSection("RECORD STUDENT GRADE (CALIFICACIÓN)");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        int teacherId = InputValidator.readInt("Enter Teacher ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String period = InputValidator.readNonEmptyString("Academic Period (I, II, III, IV, Final)");
-        double grade = InputValidator.readDouble("Grade value (0.0 to 5.0)", 0.0, 5.0);
-        String obs = InputValidator.readOptionalString("Evaluation Observations", "Desempeño satisfactorio");
+        ConsoleUtils.printSection("REGISTRAR CALIFICACIÓN (NOTA 0.0 - 5.0)");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        int teacherId = InputValidator.readInt("Ingrese ID del Docente", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String period = InputValidator.readNonEmptyString("Periodo Académico (I, II, III, IV, Final)");
+        double grade = InputValidator.readDouble("Valor de la nota (0.0 a 5.0)", 0.0, 5.0);
+        String obs = InputValidator.readOptionalString("Observaciones de la Evaluación", "Desempeño satisfactorio");
 
         Optional<AcademicRecord> rec = academicController.recordGrade(studentId, courseId, teacherId, year, period, grade, obs);
         if (rec.isPresent()) {
-            ConsoleUtils.printSuccess(String.format("Grade recorded: %.1f for Student %d in Course %d", grade, studentId, courseId));
+            ConsoleUtils.printSuccess(String.format("Calificación registrada: %.1f para el Estudiante %d en el Curso %d", grade, studentId, courseId));
         } else {
-            ConsoleUtils.printError("Failed to record grade.");
+            ConsoleUtils.printError("Error al registrar la calificación.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void consultStudentHistoryAndGpa() {
-        ConsoleUtils.printSection("STUDENT ACADEMIC TRANSCRIPT & GPA");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("HISTORIAL ACADÉMICO Y PROMEDIO (GPA)");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         List<AcademicRecord> grades = academicController.getStudentGrades(studentId);
         if (grades.isEmpty()) {
-            ConsoleUtils.printWarning("No grade records found for Student ID " + studentId);
+            ConsoleUtils.printWarning("No se encontraron registros de calificaciones para el Estudiante ID " + studentId);
         } else {
-            List<String> headers = List.of("Year", "Period", "Course Code", "Course Name", "Teacher", "Grade", "Observations");
+            List<String> headers = List.of("Año", "Periodo", "Cód. Curso", "Nombre del Curso", "Docente", "Nota", "Observaciones");
             List<List<String>> rows = new ArrayList<>();
             for (AcademicRecord r : grades) {
                 rows.add(List.of(
@@ -162,9 +162,9 @@ public class AcademicView {
             // Compute cumulative GPA and per-subject breakdown using Stream API
             double cumulativeGpa = academicController.calculateStudentCumulativeGpa(studentId);
             System.out.println();
-            ConsoleUtils.printSuccess(String.format(">> Cumulative Grade Point Average (GPA): %.2f / 5.0 <<", cumulativeGpa));
+            ConsoleUtils.printSuccess(String.format(">> Promedio Ponderado Acumulado (GPA): %.2f / 5.0 <<", cumulativeGpa));
 
-            System.out.println("\nAverage by Subject:");
+            System.out.println("\nPromedio por Asignatura:");
             Map<String, Double> bySubject = academicController.calculateAveragePerSubjectForStudent(studentId);
             bySubject.forEach((course, avg) -> System.out.printf("  • %-35s : %.2f / 5.0%n", course, avg));
         }
@@ -172,16 +172,16 @@ public class AcademicView {
     }
 
     private void calculateCourseAverage() {
-        ConsoleUtils.printSection("CALCULATE COURSE CLASS AVERAGE");
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String period = InputValidator.readNonEmptyString("Academic Period (I, II, III, IV, Final)");
+        ConsoleUtils.printSection("CALCULAR PROMEDIO GENERAL DEL CURSO");
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String period = InputValidator.readNonEmptyString("Periodo Académico (I, II, III, IV, Final)");
 
         List<AcademicRecord> records = academicController.getCourseGrades(courseId, year, period);
         if (records.isEmpty()) {
-            ConsoleUtils.printWarning("No grade records for Course " + courseId + " in " + year + " " + period);
+            ConsoleUtils.printWarning("No hay registros de calificaciones para el Curso " + courseId + " en " + year + " " + period);
         } else {
-            List<String> headers = List.of("Student Name", "Document", "Grade", "Observations");
+            List<String> headers = List.of("Nombre del Estudiante", "Documento", "Nota", "Observaciones");
             List<List<String>> rows = new ArrayList<>();
             for (AcademicRecord r : records) {
                 rows.add(List.of(
@@ -194,48 +194,48 @@ public class AcademicView {
             ConsoleUtils.printTable(headers, rows);
 
             double courseAvg = academicController.calculateCourseAverage(courseId, year, period);
-            ConsoleUtils.printSuccess(String.format("Overall Course Class Average for Course %d: %.2f / 5.0 (Total: %d students)",
+            ConsoleUtils.printSuccess(String.format("Promedio general del grupo para el Curso %d: %.2f / 5.0 (Total: %d estudiantes)",
                     courseId, courseAvg, records.size()));
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void recordAttendance() {
-        ConsoleUtils.printSection("RECORD DAILY ATTENDANCE");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        int courseId = InputValidator.readInt("Enter Course ID", 1, 999999);
-        LocalDate date = InputValidator.readDate("Attendance Date");
+        ConsoleUtils.printSection("REGISTRAR ASISTENCIA DIARIA");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        int courseId = InputValidator.readInt("Ingrese ID del Curso", 1, 999999);
+        LocalDate date = InputValidator.readDate("Fecha de Asistencia");
 
-        System.out.println("Select Status:");
+        System.out.println("Seleccione Estado:");
         System.out.println("1. Presente");
         System.out.println("2. Ausente");
         System.out.println("3. Tardanza");
         System.out.println("4. Excusa Médica");
-        int st = InputValidator.readInt("Option", 1, 4);
+        int st = InputValidator.readInt("Opción", 1, 4);
         String[] statuses = {"Presente", "Ausente", "Tardanza", "Excusa Médica"};
         String status = statuses[st - 1];
 
-        String obs = InputValidator.readOptionalString("Remarks", "");
-        int teacherId = InputValidator.readInt("Registered by Teacher ID", 1, 999999);
+        String obs = InputValidator.readOptionalString("Observaciones", "");
+        int teacherId = InputValidator.readInt("Registrado por Docente ID", 1, 999999);
 
         Optional<Attendance> att = academicController.markAttendance(studentId, courseId, date, status, obs, teacherId);
         if (att.isPresent()) {
-            ConsoleUtils.printSuccess("Attendance recorded: " + status + " on " + date);
+            ConsoleUtils.printSuccess("Asistencia registrada: " + status + " el " + date);
         } else {
-            ConsoleUtils.printError("Failed to record attendance.");
+            ConsoleUtils.printError("Error al registrar asistencia.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void viewStudentAbsences() {
-        ConsoleUtils.printSection("STUDENT ATTENDANCE & ABSENCES REPORT");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("REPORTE DE ASISTENCIA Y AUSENCIAS DEL ESTUDIANTE");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         List<Attendance> absences = academicController.getStudentAbsences(studentId);
         if (absences.isEmpty()) {
-            ConsoleUtils.printSuccess("Student has excellent attendance. No absences recorded.");
+            ConsoleUtils.printSuccess("El estudiante tiene excelente asistencia. No registra ausencias.");
         } else {
-            List<String> headers = List.of("Date", "Course", "Status", "Remarks");
+            List<String> headers = List.of("Fecha", "Curso", "Estado", "Observaciones");
             List<List<String>> rows = new ArrayList<>();
             for (Attendance a : absences) {
                 rows.add(List.of(
@@ -247,7 +247,7 @@ public class AcademicView {
             }
             ConsoleUtils.printTable(headers, rows);
             if (absences.size() >= 3) {
-                ConsoleUtils.printWarning(String.format("CONCERN: Student has accumulated %d absences/tardinesses. Parental follow-up advised.", absences.size()));
+                ConsoleUtils.printWarning(String.format("ALERTA: El estudiante ha acumulado %d ausencias/tardanzas. Se sugiere seguimiento con acudiente.", absences.size()));
             }
         }
         InputValidator.pressEnterToContinue();

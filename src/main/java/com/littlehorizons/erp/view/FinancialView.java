@@ -30,18 +30,18 @@ public class FinancialView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 5: FINANCIAL & INVOICING MANAGEMENT", "Little Horizons Educational ERP");
-            System.out.println(" 1. Browse Payment Concepts (Catálogo de Conceptos)");
-            System.out.println(" 2. Process & Record Payment (Registro de Pagos)");
-            System.out.println(" 3. Generate DIAN Electronic Invoice PDF for Existing Payment");
-            System.out.println(" 4. View Student Payment History");
-            System.out.println(" 5. View Guardian Payment History");
-            System.out.println(" 6. Report of Defaulter Students (Identificación de Morosos)");
-            System.out.println(" 7. View All Generated Electronic Invoices (Facturas Emitidas)");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 5: GESTIÓN FINANCIERA Y FACTURACIÓN", "Little Horizons Educational ERP");
+            System.out.println(" 1. Explorar Catálogo de Conceptos de Pago");
+            System.out.println(" 2. Procesar y Registrar Pago");
+            System.out.println(" 3. Generar Factura Electrónica DIAN en PDF para un Pago");
+            System.out.println(" 4. Ver Historial de Pagos del Estudiante");
+            System.out.println(" 5. Ver Historial de Pagos del Acudiente");
+            System.out.println(" 6. Reporte de Estudiantes en Mora");
+            System.out.println(" 7. Ver Facturas Electrónicas Emitidas");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 7);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 7);
 
             switch (choice) {
                 case 1 -> browseConcepts();
@@ -57,10 +57,10 @@ public class FinancialView {
     }
 
     private void browseConcepts() {
-        ConsoleUtils.printSection("PAYMENT CONCEPTS CATALOG");
+        ConsoleUtils.printSection("CATÁLOGO DE CONCEPTOS DE PAGO");
         List<PaymentConcept> concepts = financialController.getAllConcepts();
 
-        List<String> headers = List.of("ID", "Code", "Concept Name", "Base Amount (COP)", "Recurring", "Active");
+        List<String> headers = List.of("ID", "Código", "Concepto", "Monto Base (COP)", "Recurrente", "Estado");
         List<List<String>> rows = new ArrayList<>();
         for (PaymentConcept c : concepts) {
             rows.add(List.of(
@@ -68,8 +68,8 @@ public class FinancialView {
                     c.getCode(),
                     c.getName(),
                     String.format("$%,.2f", c.getBaseAmount().doubleValue()),
-                    c.isRecurring() ? "YES (Monthly)" : "NO (One-off)",
-                    c.isActive() ? "Active" : "Inactive"
+                    c.isRecurring() ? "SÍ (Mensual)" : "NO (Único)",
+                    c.isActive() ? "Activo" : "Inactivo"
             ));
         }
         ConsoleUtils.printTable(headers, rows);
@@ -77,43 +77,43 @@ public class FinancialView {
     }
 
     private void processPayment() {
-        ConsoleUtils.printSection("PROCESS & RECORD PAYMENT");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        int guardianId = InputValidator.readInt("Enter Paying Guardian ID", 1, 999999);
+        ConsoleUtils.printSection("PROCESAR Y REGISTRAR PAGO");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        int guardianId = InputValidator.readInt("Ingrese ID del Acudiente Pagador", 1, 999999);
 
         // Display concepts
         List<PaymentConcept> concepts = financialController.getAllConcepts();
-        System.out.println("\nSelect Payment Concept:");
+        System.out.println("\nSeleccione Concepto de Pago:");
         for (PaymentConcept c : concepts) {
             System.out.printf("  [%d] %-28s (Base: $%,.2f)%n", c.getId(), c.getName(), c.getBaseAmount().doubleValue());
         }
 
-        int conceptId = InputValidator.readInt("Concept ID", 1, 999999);
+        int conceptId = InputValidator.readInt("ID del Concepto", 1, 999999);
         Optional<PaymentConcept> conceptOpt = financialController.getConceptById(conceptId);
         BigDecimal defaultAmount = conceptOpt.map(PaymentConcept::getBaseAmount).orElse(BigDecimal.valueOf(380000));
 
-        System.out.printf("Base amount for selected concept is: $%,.2f%n", defaultAmount.doubleValue());
-        boolean custom = InputValidator.readBoolean("Do you wish to enter a personalized/discounted amount?");
+        System.out.printf("El monto base para el concepto seleccionado es: $%,.2f%n", defaultAmount.doubleValue());
+        boolean custom = InputValidator.readBoolean("¿Desea ingresar un monto personalizado o con descuento?");
         BigDecimal amount = defaultAmount;
         if (custom) {
-            amount = InputValidator.readBigDecimal("Enter customized amount to pay (COP)");
+            amount = InputValidator.readBigDecimal("Ingrese monto personalizado a pagar (COP)");
         }
 
-        System.out.println("Select Payment Method:");
+        System.out.println("Seleccione Método de Pago:");
         System.out.println("1. Efectivo");
         System.out.println("2. Transferencia");
         System.out.println("3. Tarjeta Débito");
         System.out.println("4. Tarjeta Crédito");
         System.out.println("5. Cheque");
-        int m = InputValidator.readInt("Option", 1, 5);
+        int m = InputValidator.readInt("Opción", 1, 5);
         String[] methods = {"Efectivo", "Transferencia", "Tarjeta Débito", "Tarjeta Crédito", "Cheque"};
         String method = methods[m - 1];
 
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String period = InputValidator.readNonEmptyString("Academic Period (I, II, III, IV, Anual)");
-        String notes = InputValidator.readOptionalString("Payment remarks", "Pago regular de pensión/concepto");
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String period = InputValidator.readNonEmptyString("Periodo Académico (I, II, III, IV, Anual)");
+        String notes = InputValidator.readOptionalString("Observaciones del pago", "Pago regular de pensión/concepto");
 
-        boolean genPdf = InputValidator.readBoolean("Generate DIAN Electronic Invoice PDF automatically?");
+        boolean genPdf = InputValidator.readBoolean("¿Generar Factura Electrónica DIAN en PDF automáticamente?");
 
         Optional<Payment> res = financialController.processPayment(
                 studentId, guardianId, conceptId, amount, method, year, period, notes, genPdf
@@ -121,23 +121,23 @@ public class FinancialView {
 
         if (res.isPresent()) {
             Payment p = res.get();
-            ConsoleUtils.printSuccess("Payment recorded successfully!");
-            System.out.println("  • Receipt Number: " + p.getReceiptNumber());
-            System.out.println("  • Payment ID:     " + p.getId());
-            System.out.printf("  • Amount Paid:    $%,.2f COP%n", p.getAmountPaid().doubleValue());
+            ConsoleUtils.printSuccess("¡Pago registrado exitosamente!");
+            System.out.println("  • Número de Recibo: " + p.getReceiptNumber());
+            System.out.println("  • ID de Pago:        " + p.getId());
+            System.out.printf("  • Monto Pagado:      $%,.2f COP%n", p.getAmountPaid().doubleValue());
 
             if (genPdf) {
-                ConsoleUtils.printSuccess(">> Official DIAN Electronic Invoice PDF generated in 'invoices/' directory! <<");
+                ConsoleUtils.printSuccess(">> ¡Factura Electrónica oficial DIAN en PDF generada en el directorio 'invoices/'! <<");
             }
         } else {
-            ConsoleUtils.printError("Failed to record payment.");
+            ConsoleUtils.printError("Error al registrar el pago.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void generateInvoiceForPayment() {
-        ConsoleUtils.printSection("GENERATE DIAN INVOICE PDF FOR PAYMENT");
-        int paymentId = InputValidator.readInt("Enter Payment ID", 1, 999999);
+        ConsoleUtils.printSection("GENERAR FACTURA ELECTRÓNICA DIAN EN PDF");
+        int paymentId = InputValidator.readInt("Ingrese ID del Pago", 1, 999999);
 
         try {
             Payment dummy = new Payment();
@@ -145,29 +145,29 @@ public class FinancialView {
             Optional<Invoice> inv = financialController.generateInvoiceForPayment(dummy);
             if (inv.isPresent()) {
                 Invoice i = inv.get();
-                ConsoleUtils.printSuccess("Invoice PDF generated successfully!");
-                System.out.println("  • Invoice Number:  " + i.getInvoiceNumber());
-                System.out.println("  • Simulated CUFE:  " + i.getCufe());
-                System.out.println("  • PDF File Path:   " + i.getFilePath());
-                System.out.println("  • DIAN QR Code:    Embedded successfully into PDF");
+                ConsoleUtils.printSuccess("¡Factura en PDF generada exitosamente!");
+                System.out.println("  • Número de Factura: " + i.getInvoiceNumber());
+                System.out.println("  • CUFE Simulado:     " + i.getCufe());
+                System.out.println("  • Ruta del Archivo:  " + i.getFilePath());
+                System.out.println("  • Código QR DIAN:    Incrustado exitosamente en el PDF");
             } else {
-                ConsoleUtils.printError("Payment not found or invoice could not be created.");
+                ConsoleUtils.printError("Pago no encontrado o no se pudo generar la factura.");
             }
         } catch (Exception e) {
-            ConsoleUtils.printError("Error generating PDF: " + e.getMessage());
+            ConsoleUtils.printError("Error al generar PDF: " + e.getMessage());
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void viewStudentPaymentHistory() {
-        ConsoleUtils.printSection("STUDENT PAYMENT HISTORY");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("HISTORIAL DE PAGOS DEL ESTUDIANTE");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         List<Payment> list = financialController.getStudentPaymentHistory(studentId);
         if (list.isEmpty()) {
-            ConsoleUtils.printWarning("No payment records found for Student ID " + studentId);
+            ConsoleUtils.printWarning("No se encontraron pagos para el Estudiante ID " + studentId);
         } else {
-            List<String> headers = List.of("Receipt No.", "Date", "Concept", "Amount (COP)", "Method", "Period");
+            List<String> headers = List.of("N° Recibo", "Fecha", "Concepto", "Monto (COP)", "Método", "Periodo");
             List<List<String>> rows = new ArrayList<>();
             for (Payment p : list) {
                 rows.add(List.of(
@@ -185,14 +185,14 @@ public class FinancialView {
     }
 
     private void viewGuardianPaymentHistory() {
-        ConsoleUtils.printSection("GUARDIAN PAYMENT HISTORY");
-        int guardianId = InputValidator.readInt("Enter Guardian ID", 1, 999999);
+        ConsoleUtils.printSection("HISTORIAL DE PAGOS DEL ACUDIENTE");
+        int guardianId = InputValidator.readInt("Ingrese ID del Acudiente", 1, 999999);
 
         List<Payment> list = financialController.getGuardianPaymentHistory(guardianId);
         if (list.isEmpty()) {
-            ConsoleUtils.printWarning("No payments found for Guardian ID " + guardianId);
+            ConsoleUtils.printWarning("No se encontraron pagos para el Acudiente ID " + guardianId);
         } else {
-            List<String> headers = List.of("Receipt No.", "Date", "Student", "Concept", "Amount (COP)", "Method");
+            List<String> headers = List.of("N° Recibo", "Fecha", "Estudiante", "Concepto", "Monto (COP)", "Método");
             List<List<String>> rows = new ArrayList<>();
             for (Payment p : list) {
                 rows.add(List.of(
@@ -210,18 +210,18 @@ public class FinancialView {
     }
 
     private void viewDefaultersReport() {
-        ConsoleUtils.printSection("DEFAULTERS REPORT (ESTUDIANTES EN MORA)");
-        int year = InputValidator.readInt("Academic Year", 2020, 2035);
-        String period = InputValidator.readNonEmptyString("Academic Period (I, II, III, IV)");
+        ConsoleUtils.printSection("REPORTE DE ESTUDIANTES EN MORA");
+        int year = InputValidator.readInt("Año Académico", 2020, 2035);
+        String period = InputValidator.readNonEmptyString("Periodo Académico (I, II, III, IV)");
 
         List<Student> defaulters = financialController.getDefaulters(year, period);
         if (defaulters.isEmpty()) {
-            ConsoleUtils.printSuccess("Great news! There are zero defaulters for period " + period + " " + year);
+            ConsoleUtils.printSuccess("¡Excelente noticia! No hay estudiantes en mora para el periodo " + period + " " + year);
         } else {
-            ConsoleUtils.printWarning(String.format("Found %d students with pending tuition for %s %d:",
+            ConsoleUtils.printWarning(String.format("Se encontraron %d estudiantes con pensión pendiente para %s %d:",
                     defaulters.size(), period, year));
 
-            List<String> headers = List.of("ID", "Document", "Student Full Name", "Phone", "Email", "Status");
+            List<String> headers = List.of("ID", "Documento", "Nombre del Estudiante", "Teléfono", "Correo Electrónico", "Estado");
             List<List<String>> rows = new ArrayList<>();
             for (Student s : defaulters) {
                 rows.add(List.of(
@@ -239,13 +239,13 @@ public class FinancialView {
     }
 
     private void viewAllInvoices() {
-        ConsoleUtils.printSection("ELECTRONIC INVOICES ISSUED (FACTURAS ELECTRÓNICAS DIAN)");
+        ConsoleUtils.printSection("FACTURAS ELECTRÓNICAS EMITIDAS (DIAN)");
         List<Invoice> list = financialController.getAllInvoices();
 
         if (list.isEmpty()) {
-            ConsoleUtils.printWarning("No electronic invoices generated yet.");
+            ConsoleUtils.printWarning("Aún no se han generado facturas electrónicas.");
         } else {
-            List<String> headers = List.of("Invoice No.", "Issue Date", "Guardian", "Receipt", "Amount (COP)", "PDF File");
+            List<String> headers = List.of("N° Factura", "Fecha Emisión", "Acudiente", "N° Recibo", "Monto (COP)", "Archivo PDF");
             List<List<String>> rows = new ArrayList<>();
             for (Invoice i : list) {
                 rows.add(List.of(
@@ -258,7 +258,7 @@ public class FinancialView {
                 ));
             }
             ConsoleUtils.printTable(headers, rows);
-            ConsoleUtils.printInfo("All PDF invoices are archived in the local 'invoices/' project directory.");
+            ConsoleUtils.printInfo("Todas las facturas PDF se encuentran archivadas en la carpeta local 'invoices/' del proyecto.");
         }
         InputValidator.pressEnterToContinue();
     }

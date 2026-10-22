@@ -27,18 +27,18 @@ public class StudentView {
     public void displayMenu() {
         boolean back = false;
         while (!back) {
-            ConsoleUtils.printHeader("MODULE 1: STUDENT & GUARDIAN MANAGEMENT", "Little Horizons Educational ERP");
-            System.out.println(" 1. Register New Student");
-            System.out.println(" 2. List All Students (Directory)");
-            System.out.println(" 3. Search Student by ID / Document");
-            System.out.println(" 4. Register Guardian (Acudiente)");
-            System.out.println(" 5. Associate Guardian to Student");
-            System.out.println(" 6. View Student Guardians & Emergency Contacts");
-            System.out.println(" 7. Update Student Status");
-            System.out.println(" 0. Return to Main Menu");
+            ConsoleUtils.printHeader("MÓDULO 1: GESTIÓN DE ESTUDIANTES Y ACUDIENTES", "Little Horizons Educational ERP");
+            System.out.println(" 1. Registrar Nuevo Estudiante");
+            System.out.println(" 2. Listar Directorio de Estudiantes");
+            System.out.println(" 3. Buscar Estudiante por ID / Documento");
+            System.out.println(" 4. Registrar Acudiente (Tutor Legal)");
+            System.out.println(" 5. Asociar Acudiente a Estudiante");
+            System.out.println(" 6. Ver Acudientes y Contactos de Emergencia");
+            System.out.println(" 7. Actualizar Estado del Estudiante");
+            System.out.println(" 0. Volver al Menú Principal");
             System.out.println();
 
-            int choice = InputValidator.readInt("Select an option", 0, 7);
+            int choice = InputValidator.readInt("Seleccione una opción", 0, 7);
 
             switch (choice) {
                 case 1 -> registerStudent();
@@ -54,22 +54,22 @@ public class StudentView {
     }
 
     private void registerStudent() {
-        ConsoleUtils.printSection("REGISTER NEW STUDENT");
+        ConsoleUtils.printSection("REGISTRAR NUEVO ESTUDIANTE");
 
-        String docType = InputValidator.readNonEmptyString("Document Type (TI, CC, CE, Pasaporte)");
-        String docNumber = InputValidator.readNonEmptyString("Document Number");
-        String firstName = InputValidator.readNonEmptyString("First Name");
-        String secondName = InputValidator.readOptionalString("Middle / Second Name", "");
-        String firstLastName = InputValidator.readNonEmptyString("First Last Name");
-        String secondLastName = InputValidator.readOptionalString("Second Last Name", "");
-        LocalDate birthDate = InputValidator.readDate("Birth Date");
-        String gender = InputValidator.readNonEmptyString("Gender (M, F, Otro)");
-        String address = InputValidator.readNonEmptyString("Residential Address");
-        String phone = InputValidator.readNonEmptyString("Contact Phone Number");
-        String email = InputValidator.readEmail("Institutional / Contact Email");
-        String bloodType = InputValidator.readNonEmptyString("Blood Type (e.g., O+, A+, B-)");
-        String allergies = InputValidator.readOptionalString("Allergies", "Ninguna");
-        String medicalConditions = InputValidator.readOptionalString("Medical Conditions", "Ninguna");
+        String docType = InputValidator.readNonEmptyString("Tipo de Documento (TI, CC, CE, Pasaporte)");
+        String docNumber = InputValidator.readNonEmptyString("Número de Documento");
+        String firstName = InputValidator.readNonEmptyString("Primer Nombre");
+        String secondName = InputValidator.readOptionalString("Segundo Nombre", "");
+        String firstLastName = InputValidator.readNonEmptyString("Primer Apellido");
+        String secondLastName = InputValidator.readOptionalString("Segundo Apellido", "");
+        LocalDate birthDate = InputValidator.readDate("Fecha de Nacimiento");
+        String gender = InputValidator.readNonEmptyString("Género (M, F, Otro)");
+        String address = InputValidator.readNonEmptyString("Dirección de Residencia");
+        String phone = InputValidator.readNonEmptyString("Teléfono de Contacto");
+        String email = InputValidator.readEmail("Correo Electrónico (Institucional / Personal)");
+        String bloodType = InputValidator.readNonEmptyString("Tipo de Sangre (ej. O+, A+, B-)");
+        String allergies = InputValidator.readOptionalString("Alergias", "Ninguna");
+        String medicalConditions = InputValidator.readOptionalString("Condiciones Médicas", "Ninguna");
 
         Student student = new Student(0, docType, docNumber, firstName, secondName, firstLastName,
                 secondLastName, birthDate, gender, address, phone, email, bloodType, allergies,
@@ -77,18 +77,18 @@ public class StudentView {
 
         Optional<Student> result = studentController.registerStudent(student);
         if (result.isPresent()) {
-            ConsoleUtils.printSuccess("Student registered successfully with ID: " + result.get().getId());
+            ConsoleUtils.printSuccess("Estudiante registrado exitosamente con ID: " + result.get().getId());
         } else {
-            ConsoleUtils.printError("Failed to register student. The document number may already exist.");
+            ConsoleUtils.printError("Error al registrar estudiante. El número de documento ya podría existir.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void listAllStudents() {
-        ConsoleUtils.printSection("STUDENT DIRECTORY");
+        ConsoleUtils.printSection("DIRECTORIO DE ESTUDIANTES");
         List<Student> students = studentController.getAllStudents();
 
-        List<String> headers = List.of("ID", "Doc Type", "Doc Number", "Full Name", "Gender", "Phone", "Status");
+        List<String> headers = List.of("ID", "Tipo Doc.", "N° Documento", "Nombre Completo", "Género", "Teléfono", "Estado");
         List<List<String>> rows = new ArrayList<>();
 
         for (Student s : students) {
@@ -104,101 +104,101 @@ public class StudentView {
         }
 
         ConsoleUtils.printTable(headers, rows);
-        ConsoleUtils.printInfo("Total students registered: " + students.size());
+        ConsoleUtils.printInfo("Total de estudiantes registrados: " + students.size());
         InputValidator.pressEnterToContinue();
     }
 
     private void searchStudent() {
-        ConsoleUtils.printSection("SEARCH STUDENT");
-        System.out.println("1. Search by Database ID");
-        System.out.println("2. Search by Identity Document");
-        int mode = InputValidator.readInt("Select search type", 1, 2);
+        ConsoleUtils.printSection("BUSCAR ESTUDIANTE");
+        System.out.println("1. Buscar por ID de Base de Datos");
+        System.out.println("2. Buscar por Documento de Identidad");
+        int mode = InputValidator.readInt("Seleccione tipo de búsqueda", 1, 2);
 
         Optional<Student> studentOpt = Optional.empty();
         if (mode == 1) {
-            int id = InputValidator.readInt("Enter Student ID", 1, 999999);
+            int id = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
             studentOpt = studentController.getStudentById(id);
         } else {
-            String docType = InputValidator.readNonEmptyString("Document Type (TI, CC, CE)");
-            String docNumber = InputValidator.readNonEmptyString("Document Number");
+            String docType = InputValidator.readNonEmptyString("Tipo de Documento (TI, CC, CE, Pasaporte)");
+            String docNumber = InputValidator.readNonEmptyString("Número de Documento");
             studentOpt = studentController.getStudentByDocument(docType, docNumber);
         }
 
         if (studentOpt.isPresent()) {
             Student s = studentOpt.get();
-            ConsoleUtils.printSuccess("Student found:");
+            ConsoleUtils.printSuccess("Estudiante encontrado:");
             System.out.println("  • ID:                  " + s.getId());
-            System.out.println("  • Full Name:           " + s.getFullName());
-            System.out.println("  • Document:            " + s.getDocumentType() + " " + s.getDocumentNumber());
-            System.out.println("  • Birth Date:          " + s.getBirthDate());
-            System.out.println("  • Gender:              " + s.getGender());
-            System.out.println("  • Email:               " + s.getEmail());
-            System.out.println("  • Phone:               " + s.getPhone());
-            System.out.println("  • Address:             " + s.getAddress());
-            System.out.println("  • Blood Type:          " + s.getBloodType());
-            System.out.println("  • Allergies:           " + s.getAllergies());
-            System.out.println("  • Medical Conditions:  " + s.getMedicalConditions());
-            System.out.println("  • Status:              " + s.getStatus());
+            System.out.println("  • Nombre Completo:     " + s.getFullName());
+            System.out.println("  • Documento:           " + s.getDocumentType() + " " + s.getDocumentNumber());
+            System.out.println("  • Fecha Nacimiento:    " + s.getBirthDate());
+            System.out.println("  • Género:              " + s.getGender());
+            System.out.println("  • Correo Electrónico:  " + s.getEmail());
+            System.out.println("  • Teléfono:            " + s.getPhone());
+            System.out.println("  • Dirección:           " + s.getAddress());
+            System.out.println("  • Tipo de Sangre:      " + s.getBloodType());
+            System.out.println("  • Alergias:            " + s.getAllergies());
+            System.out.println("  • Condiciones Médicas: " + s.getMedicalConditions());
+            System.out.println("  • Estado:              " + s.getStatus());
         } else {
-            ConsoleUtils.printError("Student not found.");
+            ConsoleUtils.printError("Estudiante no encontrado.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void registerGuardian() {
-        ConsoleUtils.printSection("REGISTER LEGAL GUARDIAN");
+        ConsoleUtils.printSection("REGISTRAR ACUDIENTE O TUTOR LEGAL");
 
-        String docType = InputValidator.readNonEmptyString("Document Type (CC, CE, Pasaporte)");
-        String docNumber = InputValidator.readNonEmptyString("Document Number");
-        String firstName = InputValidator.readNonEmptyString("First Name");
-        String secondName = InputValidator.readOptionalString("Middle Name", "");
-        String firstLastName = InputValidator.readNonEmptyString("First Last Name");
-        String secondLastName = InputValidator.readOptionalString("Second Last Name", "");
-        String relationship = InputValidator.readNonEmptyString("Relationship (Padre, Madre, Abuelo, Tutor Legal)");
-        String primaryPhone = InputValidator.readNonEmptyString("Primary Phone");
-        String secondaryPhone = InputValidator.readOptionalString("Secondary Phone", "");
-        String email = InputValidator.readEmail("Email");
-        String address = InputValidator.readNonEmptyString("Address");
-        String occupation = InputValidator.readOptionalString("Occupation", "Independiente");
-        boolean financial = InputValidator.readBoolean("Is financially responsible for payments?");
+        String docType = InputValidator.readNonEmptyString("Tipo de Documento (CC, CE, Pasaporte)");
+        String docNumber = InputValidator.readNonEmptyString("Número de Documento");
+        String firstName = InputValidator.readNonEmptyString("Primer Nombre");
+        String secondName = InputValidator.readOptionalString("Segundo Nombre", "");
+        String firstLastName = InputValidator.readNonEmptyString("Primer Apellido");
+        String secondLastName = InputValidator.readOptionalString("Segundo Apellido", "");
+        String relationship = InputValidator.readNonEmptyString("Parentesco (Padre, Madre, Abuelo, Tutor Legal)");
+        String primaryPhone = InputValidator.readNonEmptyString("Teléfono Principal");
+        String secondaryPhone = InputValidator.readOptionalString("Teléfono Secundario", "");
+        String email = InputValidator.readEmail("Correo Electrónico");
+        String address = InputValidator.readNonEmptyString("Dirección");
+        String occupation = InputValidator.readOptionalString("Ocupación", "Independiente");
+        boolean financial = InputValidator.readBoolean("¿Es responsable financiero de pagos?");
 
         Guardian g = new Guardian(0, docType, docNumber, firstName, secondName, firstLastName,
                 secondLastName, relationship, primaryPhone, secondaryPhone, email, address, occupation, financial);
 
         Optional<Guardian> res = studentController.registerGuardian(g);
         if (res.isPresent()) {
-            ConsoleUtils.printSuccess("Guardian registered with ID: " + res.get().getId());
+            ConsoleUtils.printSuccess("Acudiente registrado con ID: " + res.get().getId());
         } else {
-            ConsoleUtils.printError("Failed to register guardian.");
+            ConsoleUtils.printError("Error al registrar acudiente.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void linkGuardianToStudent() {
-        ConsoleUtils.printSection("LINK GUARDIAN TO STUDENT");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
-        int guardianId = InputValidator.readInt("Enter Guardian ID", 1, 999999);
-        boolean isPrimary = InputValidator.readBoolean("Is primary contact for communications?");
-        boolean isEmergency = InputValidator.readBoolean("Is emergency contact?");
+        ConsoleUtils.printSection("ASOCIAR ACUDIENTE A ESTUDIANTE");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
+        int guardianId = InputValidator.readInt("Ingrese ID del Acudiente", 1, 999999);
+        boolean isPrimary = InputValidator.readBoolean("¿Es contacto principal de comunicación?");
+        boolean isEmergency = InputValidator.readBoolean("¿Es contacto de emergencia?");
 
         boolean ok = studentController.linkStudentToGuardian(studentId, guardianId, isPrimary, isEmergency);
         if (ok) {
-            ConsoleUtils.printSuccess("Guardian successfully linked to student.");
+            ConsoleUtils.printSuccess("Acudiente asociado exitosamente al estudiante.");
         } else {
-            ConsoleUtils.printError("Could not link guardian. Check if both IDs exist in database.");
+            ConsoleUtils.printError("No se pudo asociar el acudiente. Verifique que ambos IDs existan en la base de datos.");
         }
         InputValidator.pressEnterToContinue();
     }
 
     private void viewStudentGuardians() {
-        ConsoleUtils.printSection("STUDENT GUARDIANS & EMERGENCY CONTACTS");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("ACUDIENTES Y CONTACTOS DE EMERGENCIA");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         List<Guardian> guardians = studentController.getGuardiansForStudent(studentId);
         if (guardians.isEmpty()) {
-            ConsoleUtils.printWarning("No guardians associated with Student ID " + studentId);
+            ConsoleUtils.printWarning("No hay acudientes asociados al Estudiante ID " + studentId);
         } else {
-            List<String> headers = List.of("ID", "Full Name", "Relationship", "Primary Phone", "Email", "Financial Resp.");
+            List<String> headers = List.of("ID", "Nombre Completo", "Parentesco", "Teléfono Principal", "Correo Electrónico", "Resp. Financiero");
             List<List<String>> rows = new ArrayList<>();
             for (Guardian g : guardians) {
                 rows.add(List.of(
@@ -207,7 +207,7 @@ public class StudentView {
                         g.getRelationship(),
                         g.getPrimaryPhone(),
                         g.getEmail(),
-                        g.isFinancialResponsible() ? "YES" : "NO"
+                        g.isFinancialResponsible() ? "SÍ" : "NO"
                 ));
             }
             ConsoleUtils.printTable(headers, rows);
@@ -216,31 +216,31 @@ public class StudentView {
     }
 
     private void updateStudentStatus() {
-        ConsoleUtils.printSection("UPDATE STUDENT STATUS");
-        int studentId = InputValidator.readInt("Enter Student ID", 1, 999999);
+        ConsoleUtils.printSection("ACTUALIZAR ESTADO DEL ESTUDIANTE");
+        int studentId = InputValidator.readInt("Ingrese ID del Estudiante", 1, 999999);
 
         Optional<Student> opt = studentController.getStudentById(studentId);
         if (opt.isEmpty()) {
-            ConsoleUtils.printError("Student not found.");
+            ConsoleUtils.printError("Estudiante no encontrado.");
             InputValidator.pressEnterToContinue();
             return;
         }
 
         Student s = opt.get();
-        System.out.println("Current status: " + s.getStatus());
+        System.out.println("Estado actual: " + s.getStatus());
         System.out.println("1. Activo");
         System.out.println("2. Graduado");
         System.out.println("3. Retirado");
         System.out.println("4. Suspendido");
-        int ch = InputValidator.readInt("Select new status", 1, 4);
+        int ch = InputValidator.readInt("Seleccione nuevo estado", 1, 4);
         String[] statuses = {"Activo", "Graduado", "Retirado", "Suspendido"};
         s.setStatus(statuses[ch - 1]);
 
         boolean updated = studentController.updateStudent(s);
         if (updated) {
-            ConsoleUtils.printSuccess("Student status updated to: " + s.getStatus());
+            ConsoleUtils.printSuccess("Estado del estudiante actualizado a: " + s.getStatus());
         } else {
-            ConsoleUtils.printError("Failed to update status.");
+            ConsoleUtils.printError("Error al actualizar el estado.");
         }
         InputValidator.pressEnterToContinue();
     }

@@ -45,7 +45,8 @@ public final class DatabaseConnection {
     }
 
     /**
-     * Loads database credentials and parameters from classpath properties file 'db.properties'.
+     * Loads database credentials and parameters from classpath properties file
+     * 'db.properties'.
      * Falls back to defaults if properties file is unavailable.
      */
     private void loadConfiguration() {
@@ -58,7 +59,8 @@ public final class DatabaseConnection {
                 this.database = props.getProperty("db.name", "erp_little_horizons");
                 this.user = props.getProperty("db.user", "root");
                 this.password = props.getProperty("db.password", "root");
-                this.params = props.getProperty("db.params", "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=UTF-8");
+                this.params = props.getProperty("db.params",
+                        "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Bogota&characterEncoding=UTF-8");
             } else {
                 setDefaults();
             }
@@ -124,8 +126,19 @@ public final class DatabaseConnection {
         AppLogger.info("Database credentials updated dynamically for user: " + user);
     }
 
-    public String getUser() { return user; }
-    public String getDatabase() { return database; }
-    public String getHost() { return host; }
-    public int getPort() { return port; }
+    public String getUser() {
+        return user;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
 }

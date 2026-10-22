@@ -37,7 +37,7 @@ public final class InputValidator {
             if (!line.isEmpty()) {
                 return line;
             }
-            ConsoleUtils.printError("Input cannot be empty. Please try again.");
+            ConsoleUtils.printError("El valor no puede estar vacío. Intente nuevamente.");
         }
     }
 
@@ -71,9 +71,9 @@ public final class InputValidator {
                 if (value >= min && value <= max) {
                     return value;
                 }
-                ConsoleUtils.printError(String.format("Value must be between %d and %d.", min, max));
+                ConsoleUtils.printError(String.format("El valor debe estar entre %d y %d.", min, max));
             } catch (NumberFormatException e) {
-                ConsoleUtils.printError("Invalid number format. Please enter an integer.");
+                ConsoleUtils.printError("Formato numérico inválido. Por favor ingrese un número entero.");
             }
         }
     }
@@ -95,9 +95,9 @@ public final class InputValidator {
                 if (value >= min && value <= max) {
                     return value;
                 }
-                ConsoleUtils.printError(String.format("Value must be between %.1f and %.1f.", min, max));
+                ConsoleUtils.printError(String.format("El valor debe estar entre %.1f y %.1f.", min, max));
             } catch (NumberFormatException e) {
-                ConsoleUtils.printError("Invalid decimal number. Please enter a valid number (e.g., 4.5).");
+                ConsoleUtils.printError("Número decimal inválido. Ingrese un valor válido (ej. 4.5).");
             }
         }
     }
@@ -117,9 +117,9 @@ public final class InputValidator {
                 if (value.compareTo(BigDecimal.ZERO) >= 0) {
                     return value;
                 }
-                ConsoleUtils.printError("Amount must be greater than or equal to 0.");
+                ConsoleUtils.printError("El monto debe ser mayor o igual a 0.");
             } catch (NumberFormatException e) {
-                ConsoleUtils.printError("Invalid monetary amount (e.g., 380000.00).");
+                ConsoleUtils.printError("Monto monetario inválido (ej. 380000.00).");
             }
         }
     }
@@ -132,12 +132,12 @@ public final class InputValidator {
      */
     public static LocalDate readDate(String prompt) {
         while (true) {
-            System.out.print(prompt + " (YYYY-MM-DD): ");
+            System.out.print(prompt + " (AAAA-MM-DD): ");
             String line = SCANNER.nextLine().trim();
             try {
                 return LocalDate.parse(line, DATE_FORMATTER);
             } catch (DateTimeParseException e) {
-                ConsoleUtils.printError("Invalid date format. Expected YYYY-MM-DD (e.g., 2024-03-15).");
+                ConsoleUtils.printError("Formato de fecha inválido. Formato esperado AAAA-MM-DD (ej. 2024-03-15).");
             }
         }
     }
@@ -147,7 +147,7 @@ public final class InputValidator {
      */
     public static LocalDate readOptionalDate(String prompt) {
         while (true) {
-            System.out.print(prompt + " (YYYY-MM-DD or leave empty): ");
+            System.out.print(prompt + " (AAAA-MM-DD o dejar vacío): ");
             String line = SCANNER.nextLine().trim();
             if (line.isEmpty()) {
                 return null;
@@ -155,7 +155,7 @@ public final class InputValidator {
             try {
                 return LocalDate.parse(line, DATE_FORMATTER);
             } catch (DateTimeParseException e) {
-                ConsoleUtils.printError("Invalid date format. Expected YYYY-MM-DD.");
+                ConsoleUtils.printError("Formato de fecha inválido. Formato esperado AAAA-MM-DD.");
             }
         }
     }
@@ -173,7 +173,7 @@ public final class InputValidator {
             if (EMAIL_PATTERN.matcher(line).matches()) {
                 return line;
             }
-            ConsoleUtils.printError("Invalid email address format (e.g., usuario@dominio.com).");
+            ConsoleUtils.printError("Formato de correo electrónico inválido (ej. usuario@dominio.com).");
         }
     }
 
@@ -185,7 +185,7 @@ public final class InputValidator {
      */
     public static boolean readBoolean(String prompt) {
         while (true) {
-            System.out.print(prompt + " (Y/N): ");
+            System.out.print(prompt + " (S/N): ");
             String line = SCANNER.nextLine().trim().toUpperCase();
             if (line.startsWith("Y") || line.startsWith("S")) {
                 return true;
@@ -193,7 +193,7 @@ public final class InputValidator {
             if (line.startsWith("N")) {
                 return false;
             }
-            ConsoleUtils.printError("Please enter 'Y' for Yes or 'N' for No.");
+            ConsoleUtils.printError("Por favor ingrese 'S' para Sí o 'N' para No.");
         }
     }
 
@@ -202,7 +202,7 @@ public final class InputValidator {
      */
     public static void pressEnterToContinue() {
         System.out.println();
-        System.out.print("Press [Enter] to continue...");
+        System.out.print("Presione [Enter] para continuar...");
         SCANNER.nextLine();
     }
 }

@@ -1,4 +1,4 @@
-﻿-- ============================================================================
+-- ============================================================================
 -- Little Horizons Educational ERP - Complete Database Script
 -- Institution: Colegio Internacional Little Horizons S.A.S.
 -- Author: Jesús Sánchez (Jesussanchez2805)
