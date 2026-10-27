@@ -23,6 +23,7 @@ public class Main {
                 "Colegio Internacional Little Horizons S.A.S. - Sistema de Gestión"
         );
 
+
         // Pre-flight database connectivity check
         try {
             boolean connected = DatabaseConnection.getInstance().testConnection();

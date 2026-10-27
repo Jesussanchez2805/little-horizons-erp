@@ -113,6 +113,89 @@ public class Student {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    /**
+     * @return age in complete years on the given date
+     */
+    public int getAge(LocalDate onDate) {
+        return java.time.Period.between(birthDate, onDate).getYears();
+    }
+
+    /**
+     * @return current age in complete years
+     */
+    public int getAge() {
+        return getAge(LocalDate.now());
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Builder pattern: replaces the 17-argument constructor with readable, step-by-step construction.
+     * Document type, document number, first name, first last name and birth date are mandatory.
+     * Status defaults to 'Activo' and entry date to today.
+     */
+    public static class Builder {
+        private int id;
+        private String documentType;
+        private String documentNumber;
+        private String firstName;
+        private String secondName;
+        private String firstLastName;
+        private String secondLastName;
+        private LocalDate birthDate;
+        private String gender;
+        private String address;
+        private String phone;
+        private String email;
+        private String bloodType;
+        private String allergies;
+        private String medicalConditions;
+        private LocalDate entryDate = LocalDate.now();
+        private String status = "Activo";
+
+        public Builder id(int id) { this.id = id; return this; }
+        public Builder documentType(String documentType) { this.documentType = documentType; return this; }
+        public Builder documentNumber(String documentNumber) { this.documentNumber = documentNumber; return this; }
+        public Builder firstName(String firstName) { this.firstName = firstName; return this; }
+        public Builder secondName(String secondName) { this.secondName = secondName; return this; }
+        public Builder firstLastName(String firstLastName) { this.firstLastName = firstLastName; return this; }
+        public Builder secondLastName(String secondLastName) { this.secondLastName = secondLastName; return this; }
+        public Builder birthDate(LocalDate birthDate) { this.birthDate = birthDate; return this; }
+        public Builder gender(String gender) { this.gender = gender; return this; }
+        public Builder address(String address) { this.address = address; return this; }
+        public Builder phone(String phone) { this.phone = phone; return this; }
+        public Builder email(String email) { this.email = email; return this; }
+        public Builder bloodType(String bloodType) { this.bloodType = bloodType; return this; }
+        public Builder allergies(String allergies) { this.allergies = allergies; return this; }
+        public Builder medicalConditions(String medicalConditions) { this.medicalConditions = medicalConditions; return this; }
+        public Builder entryDate(LocalDate entryDate) { this.entryDate = entryDate; return this; }
+        public Builder status(String status) { this.status = status; return this; }
+
+        /**
+         * @throws IllegalStateException listing every mandatory field that is missing
+         */
+        public Student build() {
+            java.util.List<String> missing = new java.util.ArrayList<>();
+            if (isBlank(documentType)) missing.add("documentType");
+            if (isBlank(documentNumber)) missing.add("documentNumber");
+            if (isBlank(firstName)) missing.add("firstName");
+            if (isBlank(firstLastName)) missing.add("firstLastName");
+            if (birthDate == null) missing.add("birthDate");
+            if (!missing.isEmpty()) {
+                throw new IllegalStateException("Missing mandatory student fields: " + String.join(", ", missing));
+            }
+            return new Student(id, documentType, documentNumber, firstName, secondName, firstLastName,
+                    secondLastName, birthDate, gender, address, phone, email, bloodType, allergies,
+                    medicalConditions, entryDate, status);
+        }
+
+        private static boolean isBlank(String value) {
+            return value == null || value.isBlank();
+        }
+    }
+
     @Override
     public String toString() {
         return String.format("[%s %s] %s (%s)", documentType, documentNumber, getFullName(), status);

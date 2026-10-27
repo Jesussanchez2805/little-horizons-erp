@@ -60,10 +60,11 @@ public class MainMenuView {
             System.out.println(" 6. Gestión de Recursos (Biblioteca, Laboratorios y Préstamos)");
             System.out.println(" 7. Reportes y Estadísticas Ejecutivas");
             System.out.println(" 8. Configuración de Base de Datos");
-            System.out.println(" 9. Salir del Sistema");
+            System.out.println(" 9. Módulo Examen: Evaluaciones y Nuevas Funcionalidades");
+            System.out.println(" 10. Salir del Sistema");
             System.out.println();
 
-            int option = InputValidator.readInt("Seleccione una opción", 1, 9);
+            int option = InputValidator.readInt("Seleccione una opción", 1, 10);
 
             switch (option) {
                 case 1 -> studentView.displayMenu();
